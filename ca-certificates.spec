@@ -1,15 +1,14 @@
 Summary:	Common CA Certificates PEM files
 Name:		ca-certificates
 Version:	20070303
-Release:	0.11
+Release:	0.12
 Group:		Libraries
 URL:		http://www.cacert.org/
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
 # Source0-md5:	e356066a02d257d23f8e0f4d48d08b1b
 License:	freedist
 Requires:	mktemp
-#Requires:	openssl-tools
-#Requires:	/usr/bin/c_rehash
+Requires:	openssl-tools-perl
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description

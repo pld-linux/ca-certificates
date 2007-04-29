@@ -1,18 +1,23 @@
 Summary:	Common CA Certificates PEM files
+Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20070303
 Release:	0.12
+# is it license name or should be unified? ("distributable"?)
+License:	freedist
 Group:		Libraries
-URL:		http://www.cacert.org/
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
 # Source0-md5:	e356066a02d257d23f8e0f4d48d08b1b
-License:	freedist
+URL:		http://www.cacert.org/
 Requires:	mktemp
 Requires:	openssl-tools-perl
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
-Common CA Certificates PEM files
+Common CA Certificates PEM files.
+
+%description -l pl.UTF-8
+Pliki PEM popularnych certyfikatów CA.
 
 %prep
 %setup -q

@@ -1,16 +1,21 @@
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
-Version:	20070303
-Release:	0.12
+Version:	20080809
+Release:	0.1
 # is it license name or should be unified? ("distributable"?)
 License:	freedist
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
-# Source0-md5:	e356066a02d257d23f8e0f4d48d08b1b
+# Source0-md5:	c155f5059006b94ad0aea7018161ab37
 URL:		http://www.cacert.org/
+# for temp files
 Requires:	mktemp
+# for c_rehash
 Requires:	openssl-tools-perl
+# for /bin/run-parts
+Requires:	rc-scripts >= 0.4.1.25
+BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -20,7 +25,7 @@ Common CA Certificates PEM files.
 Pliki PEM popularnych certyfikatów CA.
 
 %prep
-%setup -q
+%setup -q -n %{name}
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -45,7 +50,8 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %dir %{_sysconfdir}/ssl/certs
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ca-certificates.conf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ssl/certs/ca-certificates.crt
+# remove noreplace?
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ca-certificates.conf
 %attr(755,root,root) %{_sbindir}/update-ca-certificates
 %{_datadir}/ca-certificates

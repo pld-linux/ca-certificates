@@ -1,4 +1,5 @@
 # TODO
+# - keep one: certificates.spec vs ca-certificates.spec
 # - get rid (or update our rc-scripts) debianized run-parts
 # - use global certs dir or sth
 Summary:	Common CA Certificates PEM files

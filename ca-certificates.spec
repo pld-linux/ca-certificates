@@ -42,6 +42,7 @@ BuildRequires:	unzip
 Requires:	mktemp
 Requires:	openssl >= 0.9.8i-2
 Requires:	openssl-tools-perl >= 0.9.8i-2
+Requires:	rpm-whiteout >= 1.7
 Obsoletes:	certificates
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)

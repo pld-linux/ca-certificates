@@ -1,10 +1,8 @@
-# TODO
-# - keep one: certificates.spec vs ca-certificates.spec
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20080809
-Release:	0.2
+Release:	1
 License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
@@ -37,6 +35,7 @@ Source13:	http://www.certum.pl/keys/class4.pem
 # Source13-md5:	99ef61d509539af89f1c025b67245965
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
+Patch2:		%{name}-etc-certs.patch
 URL:		http://www.cacert.org/
 BuildRequires:	ruby
 BuildRequires:	unzip
@@ -56,6 +55,7 @@ Pliki PEM popularnych certyfikatów CA.
 %setup -q -n %{name}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 unzip %{SOURCE1} '*_b64.txt' -d thawte/
 for I in thawte/{,*/}*.txt; do
@@ -87,7 +87,7 @@ rm mozilla/{Thawte,thawte,Certum}*.crt
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_sbindir},/etc/certs}
+install -d $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_sbindir},/etc/openssl}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -97,7 +97,7 @@ cd $RPM_BUILD_ROOT%{_datadir}/ca-certificates
 find . -name '*.crt' | sort | cut -b3-
 ) > $RPM_BUILD_ROOT%{_sysconfdir}/ca-certificates.conf
 
-touch $RPM_BUILD_ROOT/etc/certs/ca-certificates.crt
+touch $RPM_BUILD_ROOT/etc/openssl/ca-certificates.crt
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -107,7 +107,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) /etc/certs/ca-certificates.crt
+%config(noreplace) %verify(not md5 mtime size) /etc/openssl/ca-certificates.crt
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ca-certificates.conf
 %attr(755,root,root) %{_sbindir}/update-ca-certificates
 %{_datadir}/ca-certificates

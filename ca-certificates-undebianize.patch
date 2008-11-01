@@ -4,9 +4,10 @@ diff -ur ca-certificates/sbin/update-ca-certificates ca-certificates-undebianize
 @@ -38,7 +38,7 @@
  CERTSCONF=/etc/ca-certificates.conf
  CERTSDIR=/usr/share/ca-certificates
- CERTBUNDLE=ca-certificates.crt
+-CERTBUNDLE=ca-certificates.crt
 -ETCCERTSDIR=/etc/ssl/certs
-+ETCCERTSDIR=/etc/certs
++CERTBUNDLE=/etc/openssl/ca-certificates.crt
++ETCCERTSDIR=/etc/openssl/certs
  cd $ETCCERTSDIR
  if [ "$fresh" = 1 ]; then
    echo -n "Clearing symlinks in $ETCCERTSDIR..."
@@ -34,7 +35,7 @@ diff -ur ca-certificates/sbin/update-ca-certificates.8 ca-certificates-undebiani
  .\" for manpage-specific macros, see man(7)
  .SH NAME
 -update-ca-certificates \- update /etc/ssl/certs and certificates.crt
-+update-ca-certificates \- update /etc/certs and certificates.crt
++update-ca-certificates \- update /etc/openssl/certs and ca-certificates.crt
  .SH SYNOPSIS
  .B update-ca-certificates
  .RI [ options ]
@@ -43,7 +44,7 @@ diff -ur ca-certificates/sbin/update-ca-certificates.8 ca-certificates-undebiani
  This manual page was written for the Debian distribution.
  .PP
 -\fBupdate-ca-certificates\fP is a program that updates /etc/ssl/certs
-+\fBupdate-ca-certificates\fP is a program that updates /etc/certs
++\fBupdate-ca-certificates\fP is a program that updates /etc/openssl/certs
  directory to hold SSL certificates and generates certificates.crt that is
  single-file version of CA certificates.
  .PP
@@ -64,14 +65,14 @@ diff -ur ca-certificates/sbin/update-ca-certificates.8 ca-certificates-undebiani
  .TP
  .B \-f, \-\-fresh
 -Fresh updates.  Remove symlinks in /etc/ssl/certs directory.
-+Fresh updates.  Remove symlinks in /etc/certs directory.
++Fresh updates.  Remove symlinks in /etc/openss/certs directory.
  .SH FILES
  .TP
  .I /etc/ca-certificates.conf
  A configuration file.
  .TP
 -.I /etc/ssl/certs/ca-certificates.crt
-+.I /etc/certs/ca-certificates.crt
++.I /etc/openssl/ca-certificates.crt
  A single-file version of CA certificates.  This hold
  all CA certificates that you activated in /etc/ca-certificates.conf.
  .TP

@@ -1,0 +1,48 @@
+--- ca-certificates/sbin/update-ca-certificates	2008-11-01 18:39:19.000000000 +0100
++++ ca-certificates/sbin/update-ca-certificates-local	2008-11-01 19:17:39.138384960 +0100
+@@ -37,6 +37,7 @@
+ 
+ CERTSCONF=/etc/ca-certificates.conf
+ CERTSDIR=/usr/share/ca-certificates
++LOCALCERTSDIR=/etc/certs
+ CERTBUNDLE=/etc/openssl/ca-certificates.crt
+ ETCCERTSDIR=/etc/openssl/certs
+ cd $ETCCERTSDIR
+@@ -46,6 +47,7 @@
+   do
+      case $(readlink $symlink) in
+      $CERTSDIR*) rm -f $symlink;;
++     $LOCALCERTSDIR*) rm -f $symlink;;
+      esac
+   done
+   find . -type l -print | while read symlink
+@@ -60,7 +62,7 @@
+ removed="$(sed -ne 's/^!//p' $CERTSCONF | while read crt
+ do
+  if test "$crt" = ""; then continue; fi
+- pem=$(basename "$crt" .crt).pem
++ pem=$(basename "$crt" | sed 's/.crt$/.pem/')
+  if test -e "$pem"; then
+   rm -f "$pem"
+   echo "-$ETCCERTSDIR/$pem"
+@@ -70,11 +72,16 @@
+ added="$(sed -e '/^#/d' -e '/^!/d' $CERTSCONF | while read crt
+ do
+  if test "$crt" = ""; then continue; fi
+- if ! test -f "$CERTSDIR/$crt"; then continue; fi
+- pem=$(basename "$crt" .crt).pem
++ if ! test -f "$CERTSDIR/$crt" && ! test -f "$LOCALCERTSDIR/$crt" ; then continue; fi
++ pem=$(basename "$crt" | sed 's/.crt$/.pem/')
+  if ! test -e "$pem"; then echo "+$ETCCERTSDIR/$pem"; fi
+- ln -sf "$CERTSDIR/$crt" "$pem"
+- cat "$CERTSDIR/$crt" >> "$bundletmp"
++ if test -f "$CERTSDIR/$crt" ; then
++  ln -sf "$CERTSDIR/$crt" "$pem"
++  cat "$CERTSDIR/$crt" >> "$bundletmp"
++ elif test -f "$LOCALCERTSDIR/$crt" ; then
++  ln -sf "$LOCALCERTSDIR/$crt" "$pem"
++  cat "$LOCALCERTSDIR/$crt" >> "$bundletmp"
++ fi
+ done)"
+ chmod 0644 "$bundletmp"
+ mv -f "$bundletmp" "$CERTBUNDLE"

@@ -40,7 +40,8 @@ URL:		http://www.cacert.org/
 BuildRequires:	ruby
 BuildRequires:	unzip
 Requires:	mktemp
-Requires:	openssl-tools-perl
+Requires:	openssl >= 0.9.8i-2
+Requires:	openssl-tools-perl >= 0.9.8i-2
 Obsoletes:	certificates
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)

@@ -72,9 +72,9 @@ Skrypt i dane do odświeżania bazy certyfikatów CA.
 %patch2 -p1
 %patch3 -p1
 
-unzip %{SOURCE1} '*_b64.txt' -d thawte/
-for I in thawte/{,*/}*.txt; do
-	mv "$I" "`echo $I | sed -e 's|_b64.txt|.crt|' -e 's|/.*/|/|'`"
+%{__unzip} -qq %{SOURCE1} '*_b64.txt' -d thawte
+for a in thawte/{,*/}*.txt; do
+	mv "$a" "${a%_b64.txt}.crt"
 done
 
 install -d certum
@@ -90,8 +90,8 @@ install %{SOURCE10} certum
 install %{SOURCE11} certum
 install %{SOURCE12} certum
 install %{SOURCE13} certum
-for I in certum/*.pem; do
-	mv "$I" "`echo $I | sed -e 's|pem|crt|'`"
+for a in certum/*.pem; do
+	mv "$a" "${a%.pem}.crt"
 done
 
 %build

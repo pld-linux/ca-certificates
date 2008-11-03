@@ -2,7 +2,7 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20080809
-Release:	2
+Release:	3
 License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
@@ -36,12 +36,11 @@ Source13:	http://www.certum.pl/keys/class4.pem
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
+Patch3:		%{name}-c_rehash.sh.patch
 URL:		http://www.cacert.org/
 BuildRequires:	ruby
 BuildRequires:	unzip
 Requires:	mktemp
-Requires:	openssl >= 0.9.8i-2
-Requires:	openssl-tools-perl >= 0.9.8i-2
 Requires:	rpm-whiteout >= 1.7
 Obsoletes:	certificates
 BuildArch:	noarch
@@ -53,11 +52,25 @@ Common CA Certificates PEM files.
 %description -l pl.UTF-8
 Pliki PEM popularnych certyfikatów CA.
 
+%package update
+Summary:	Script for updating CA Certificates database
+Summary(pl.UTF-8):	Skrypt do odświeżania bazy certyfikatów CA
+Group:		Libraries
+Requires:	%{name}
+Requires:	openssl-tools >= 0.9.8i-3
+
+%description update
+Script and data for updating CA Certificates database.
+
+%description -l pl.UTF-8 update
+Skrypt i dane do odświeżania bazy certyfikatów CA.
+
 %prep
 %setup -q -n %{name}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
+%patch3 -p1
 
 unzip %{SOURCE1} '*_b64.txt' -d thawte/
 for I in thawte/{,*/}*.txt; do
@@ -99,17 +112,23 @@ cd $RPM_BUILD_ROOT%{_datadir}/ca-certificates
 find . -name '*.crt' | sort | cut -b3-
 ) > $RPM_BUILD_ROOT%{_sysconfdir}/ca-certificates.conf
 
-touch $RPM_BUILD_ROOT/etc/openssl/ca-certificates.crt
+(
+cd $RPM_BUILD_ROOT%{_datadir}/ca-certificates
+find . -name '*.crt' -print0 | xargs -0 cat
+) > $RPM_BUILD_ROOT%{_sysconfdir}/openssl/ca-certificates.crt
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
+%post update
 %{_sbindir}/update-ca-certificates || :
 
 %files
 %defattr(644,root,root,755)
 %config(noreplace) %verify(not md5 mtime size) /etc/openssl/ca-certificates.crt
-%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ca-certificates.conf
+
+%files update
+%defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/update-ca-certificates
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ca-certificates.conf
 %{_datadir}/ca-certificates

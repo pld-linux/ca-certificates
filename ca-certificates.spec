@@ -7,7 +7,7 @@ License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
 # Source0-md5:	c155f5059006b94ad0aea7018161ab37
-Source1:	https://www.verisign.com/support/thawte-roots.zip 
+Source1:	https://www.verisign.com/support/thawte-roots.zip
 # Source1-md5:	a3709cc0279ef3fca4f86ea775066b18
 Source2:	http://www.certum.pl/keys/CA.pem
 # Source2-md5:	35610177afc9c64e70f1ce62c1885496
@@ -56,13 +56,13 @@ Pliki PEM popularnych certyfikatów CA.
 Summary:	Script for updating CA Certificates database
 Summary(pl.UTF-8):	Skrypt do odświeżania bazy certyfikatów CA
 Group:		Libraries
-Requires:	%{name}
+Requires:	%{name} = %{version}-%{release}
 Requires:	openssl-tools >= 0.9.8i-3
 
 %description update
 Script and data for updating CA Certificates database.
 
-%description -l pl.UTF-8 update
+%description update -l pl.UTF-8
 Skrypt i dane do odświeżania bazy certyfikatów CA.
 
 %prep

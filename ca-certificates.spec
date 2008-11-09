@@ -2,7 +2,7 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20080809
-Release:	3
+Release:	4
 License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
@@ -45,6 +45,8 @@ Requires:	rpm-whiteout >= 1.7
 Obsoletes:	certificates
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define		certsdir	/etc/certs
 
 %description
 Common CA Certificates PEM files.
@@ -102,7 +104,7 @@ rm mozilla/{Thawte,thawte,Certum}*.crt
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_sbindir},/etc/openssl}
+install -d $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_sbindir},%{certsdir}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -115,7 +117,7 @@ find . -name '*.crt' | sort | cut -b3-
 (
 cd $RPM_BUILD_ROOT%{_datadir}/ca-certificates
 find . -name '*.crt' -print0 | xargs -0 cat
-) > $RPM_BUILD_ROOT%{_sysconfdir}/openssl/ca-certificates.crt
+) > $RPM_BUILD_ROOT%{certsdir}/ca-certificates.crt
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -125,7 +127,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%config(noreplace) %verify(not md5 mtime size) /etc/openssl/ca-certificates.crt
+%config(noreplace) %verify(not md5 mtime size) %{certsdir}/ca-certificates.crt
 
 %files update
 %defattr(644,root,root,755)

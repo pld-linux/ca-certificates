@@ -43,7 +43,6 @@ URL:		http://www.cacert.org/
 BuildRequires:	ruby
 BuildRequires:	unzip
 Requires:	mktemp
-Requires:	rpm-whiteout >= 1.7
 Obsoletes:	certificates
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)

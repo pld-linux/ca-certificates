@@ -28,6 +28,14 @@
    then
      rm -f "$PEM"
 @@ -110,24 +110,18 @@
+   do
+      case $(readlink $symlink) in
+      $CERTSDIR*) rm -f $symlink;;
++     $LOCALCERTSDIR*) rm -f $symlink;;
+      esac
+   done
+   find . -type l -print | while read symlink
+@@ -110,24 +110,18 @@
  
  sed -e '/^$/d' -e '/^#/d' -e '/^!/d' $CERTSCONF | while read crt
  do

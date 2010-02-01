@@ -27,7 +27,7 @@
    if test -L "$PEM"
    then
      rm -f "$PEM"
-@@ -110,24 +110,17 @@
+@@ -110,24 +110,18 @@
  
  sed -e '/^$/d' -e '/^#/d' -e '/^!/d' $CERTSCONF | while read crt
  do
@@ -36,6 +36,7 @@
    then
 +    add "$CERTSDIR/$crt"
 +  elif test -f "$LOCALCERTSDIR/$crt"
++  then
 +    add "$LOCALCERTSDIR/$crt"
 +  else
 -    echo "W: $CERTSDIR/$crt not found, but listed in $CERTSCONF." >&2

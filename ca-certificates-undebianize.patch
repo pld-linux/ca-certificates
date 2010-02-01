@@ -4,29 +4,32 @@ diff -ur ca-certificates/sbin/update-ca-certificates ca-certificates-undebianize
 @@ -38,7 +38,7 @@
  CERTSCONF=/etc/ca-certificates.conf
  CERTSDIR=/usr/share/ca-certificates
+ LOCALCERTSDIR=/usr/local/share/ca-certificates
 -CERTBUNDLE=ca-certificates.crt
 -ETCCERTSDIR=/etc/ssl/certs
 +CERTBUNDLE=/etc/openssl/ca-certificates.crt
 +ETCCERTSDIR=/etc/openssl/certs
- cd $ETCCERTSDIR
- if [ "$fresh" = 1 ]; then
-   echo -n "Clearing symlinks in $ETCCERTSDIR..."
-@@ -88,15 +88,6 @@
-     c_rehash .
-   fi
-   echo "done."
--
--  HOOKSDIR=/etc/ca-certificates/update.d
--  echo -n "Running hooks in $HOOKSDIR...."
--  VERBOSE_ARG=
--  [ "$verbose" = 0 ] || VERBOSE_ARG=--verbose
--  eval run-parts $VERB_ARG --test -- $HOOKSDIR | while read hook; do
--  printf -- "${removed:+$removed\n}${added:+$added\n}" | eval $hook
--  done
--  echo "done."
- else
-   echo "done."
+ 
+ cleanup() {
+   rm -f "$TEMPBUNDLE"
+@@ -88,17 +88,6 @@
  fi
+ 
+ echo "$ADDED_CNT added, $REMOVED_CNT removed; done."
+-
+-HOOKSDIR=/etc/ca-certificates/update.d
+-echo -n "Running hooks in $HOOKSDIR...."
+-VERBOSE_ARG=
+-[ "$verbose" = 0 ] || VERBOSE_ARG=--verbose
+-eval run-parts $VERB_ARG --test -- $HOOKSDIR | while read hook
+-do
+-  ( cat $ADDED
+-    cat $REMOVED ) | $hook || echo E: $hook exited with code $?.
+-done
+-echo "done."
+ 
+ # vim:set et sw=2:
+ 
 diff -ur ca-certificates/sbin/update-ca-certificates.8 ca-certificates-undebianize/sbin/update-ca-certificates.8
 --- ca-certificates/sbin/update-ca-certificates.8	2008-04-11 20:47:29.000000000 +0200
 +++ ca-certificates-undebianize/sbin/update-ca-certificates.8	2008-11-01 12:18:14.000000000 +0100
@@ -40,18 +43,18 @@ diff -ur ca-certificates/sbin/update-ca-certificates.8 ca-certificates-undebiani
  .B update-ca-certificates
  .RI [ options ]
 @@ -26,7 +26,7 @@
- commands.
  This manual page was written for the Debian distribution.
  .PP
--\fBupdate-ca-certificates\fP is a program that updates /etc/ssl/certs
-+\fBupdate-ca-certificates\fP is a program that updates /etc/openssl/certs
- directory to hold SSL certificates and generates certificates.crt that is
- single-file version of CA certificates.
+ \fBupdate-ca-certificates\fP is a program that updates the directory
+-/etc/ssl/certs to hold SSL certificates and generates certificates.crt,
++/etc/openssl/certs to hold SSL certificates and generates certificates.crt,
+ a concatenated single-file list of certificates.
  .PP
+ It reads the file /etc/ca-certificates.conf. Each line gives a pathname of
 @@ -34,11 +34,6 @@
- activated CA certificates under /usr/share/ca-certificates.
- Lines that begin with "#" is comment line. 
- Lines that begin with "!" is deselect, deactivation of the CA certificates. 
+ .PP
+ Furthermore all certificates found below /usr/local/share/ca-certificates
+ are also included as implicitly trusted.
 -.PP
 -Before terminating, \fBupdate-ca-certificates\fP invokes
 -\fBrun-parts\fP on /etc/ca-certificates/update.d and calls each hook with

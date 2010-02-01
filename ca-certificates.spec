@@ -3,14 +3,14 @@
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
-Version:	20081127
+Version:	20090814
 Release:	1
 License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
-# Source0-md5:	4a4b07e755e1506cab753eec9a2e7157
+# Source0-md5:	307052c985bec7f9a00eb84293eef779
 Source1:	https://www.verisign.com/support/thawte-roots.zip
-# Source1-md5:	a3709cc0279ef3fca4f86ea775066b18
+# Source1-md5:	3e50e5facce6b6bfbf68271d066005fa
 Source2:	http://www.certum.pl/keys/CA.pem
 # Source2-md5:	35610177afc9c64e70f1ce62c1885496
 Source3:	http://www.certum.pl/keys/level1.pem
@@ -40,7 +40,8 @@ Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
 Patch3:		%{name}-c_rehash.sh.patch
 URL:		http://www.cacert.org/
-BuildRequires:	ruby
+BuildRequires:	coreutils
+BuildRequires:	python
 BuildRequires:	unzip
 Obsoletes:	certificates
 BuildArch:	noarch
@@ -69,15 +70,21 @@ Script and data for updating CA Certificates database.
 Skrypt i dane do odświeżania bazy certyfikatów CA.
 
 %prep
-%setup -q -n %{name}
+%setup -q
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 
-%{__unzip} -qq %{SOURCE1} '*_b64.txt' -d thawte
-for a in thawte/{,*/}*.txt; do
-	mv "$a" "${a%_b64.txt}.crt"
+%{__unzip} -qq %{SOURCE1} -d thawte
+# resolve file name clash
+mv 'thawte/Thawte Roots/Thawte Extended Validation/thawte Primary Root CA - G1 (EV)/thawte_Primary_Root_CA.pem' \
+	'thawte/Thawte Roots/Thawte Extended Validation/thawte Primary Root CA - G1 (EV)/thawte_Primary_Root_CA_CC.pem'
+
+find thawte/ -name *.pem | while read f ; do
+	ff=$(echo $f | sed -e 's|[ ,]|_|g' -e 's|[()]|=|g')
+	fff="thawte/$(basename "$ff" .pem).crt"
+	tr -d '\r' < "$f" > "$fff"
 done
 
 install -d certum

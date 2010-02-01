@@ -1,48 +1,60 @@
 --- ca-certificates/sbin/update-ca-certificates	2008-11-01 18:39:19.000000000 +0100
 +++ ca-certificates/sbin/update-ca-certificates-local	2008-11-01 19:17:39.138384960 +0100
-@@ -37,6 +37,7 @@
+@@ -37,7 +37,7 @@
  
  CERTSCONF=/etc/ca-certificates.conf
  CERTSDIR=/usr/share/ca-certificates
+-LOCALCERTSDIR=/usr/local/share/ca-certificates
 +LOCALCERTSDIR=/etc/certs
  CERTBUNDLE=/etc/openssl/ca-certificates.crt
  ETCCERTSDIR=/etc/openssl/certs
  cd $ETCCERTSDIR
-@@ -46,6 +47,7 @@
-   do
-      case $(readlink $symlink) in
-      $CERTSDIR*) rm -f $symlink;;
-+     $LOCALCERTSDIR*) rm -f $symlink;;
-      esac
-   done
-   find . -type l -print | while read symlink
-@@ -60,7 +62,7 @@
- removed="$(sed -ne 's/^!//p' $CERTSCONF | while read crt
+@@ -62,7 +62,7 @@
+ # bundle.
+ add() {
+   CERT="$1"
+-  PEM="$ETCCERTSDIR/$(basename "$CERT" .crt | sed -e 's/ /_/g' \
++  PEM="$ETCCERTSDIR/$(basename "$CERT" | sed -e 's/.crt$/.pem/' -e 's/ /_/g' \
+                                                   -e 's/[()]/=/g' \
+                                                   -e 's/,/_/g').pem"
+   if ! test -e "$PEM" || [ "$(readlink "$PEM")" != "$CERT" ]
+@@ -74,7 +74,7 @@
+ 
+ remove() {
+   CERT="$1"
+-  PEM="$ETCCERTSDIR/$(basename "$CERT" .crt).pem"
++  PEM="$ETCCERTSDIR/$(basename "$CERT" | sed 's/.crt$/.pem/')"
+   if test -L "$PEM"
+   then
+     rm -f "$PEM"
+@@ -110,24 +110,17 @@
+ 
+ sed -e '/^$/d' -e '/^#/d' -e '/^!/d' $CERTSCONF | while read crt
  do
-  if test "$crt" = ""; then continue; fi
-- pem=$(basename "$crt" .crt).pem
-+ pem=$(basename "$crt" | sed 's/.crt$/.pem/')
-  if test -e "$pem"; then
-   rm -f "$pem"
-   echo "-$ETCCERTSDIR/$pem"
-@@ -70,11 +72,16 @@
- added="$(sed -e '/^#/d' -e '/^!/d' $CERTSCONF | while read crt
- do
-  if test "$crt" = ""; then continue; fi
-- if ! test -f "$CERTSDIR/$crt"; then continue; fi
-- pem=$(basename "$crt" .crt).pem
-+ if ! test -f "$CERTSDIR/$crt" && ! test -f "$LOCALCERTSDIR/$crt" ; then continue; fi
-+ pem=$(basename "$crt" | sed 's/.crt$/.pem/')
-  if ! test -e "$pem"; then echo "+$ETCCERTSDIR/$pem"; fi
-- ln -sf "$CERTSDIR/$crt" "$pem"
-- cat "$CERTSDIR/$crt" >> "$bundletmp"
-+ if test -f "$CERTSDIR/$crt" ; then
-+  ln -sf "$CERTSDIR/$crt" "$pem"
-+  cat "$CERTSDIR/$crt" >> "$bundletmp"
-+ elif test -f "$LOCALCERTSDIR/$crt" ; then
-+  ln -sf "$LOCALCERTSDIR/$crt" "$pem"
-+  cat "$LOCALCERTSDIR/$crt" >> "$bundletmp"
-+ fi
- done)"
- chmod 0644 "$bundletmp"
- mv -f "$bundletmp" "$CERTBUNDLE"
+-  if ! test -f "$CERTSDIR/$crt"
++  if test -f "$CERTSDIR/$crt"
+   then
++    add "$CERTSDIR/$crt"
++  elif test -f "$LOCALCERTSDIR/$crt"
++    add "$LOCALCERTSDIR/$crt"
++  else
+-    echo "W: $CERTSDIR/$crt not found, but listed in $CERTSCONF." >&2
++    echo "W: $CERTSDIR/$crt or $LOCALCERTSDIR/$crt not found, but listed in $CERTSCONF." >&2
+     continue
+   fi
+-  add "$CERTSDIR/$crt"
+ done
+ 
+-# Now process certificate authorities installed by the local system
+-# administrator.
+-if [ -d "$LOCALCERTSDIR" ]
+-then
+-  find -L "$LOCALCERTSDIR" -type f -name '*.crt' | while read crt
+-  do
+-    add "$crt"
+-  done
+-fi
+-
+ chmod 0644 "$TEMPBUNDLE"
+ mv -f "$TEMPBUNDLE" "$CERTBUNDLE"
+ 

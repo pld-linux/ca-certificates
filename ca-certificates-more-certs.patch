@@ -1,11 +1,11 @@
 --- ca-certificates/Makefile~	2008-06-23 20:57:45.000000000 +0200
 +++ ca-certificates/Makefile	2008-11-01 13:10:32.000000000 +0100
 @@ -5,7 +5,7 @@
+ #
+ 
  CERTSDIR = /usr/share/ca-certificates
- SUBDIRS = spi-inc.org debconf.org mozilla \
- 	cacert.org brasil.gov.br signet.pl quovadis.bm \
--	telesec.de gouv.fr
-+	telesec.de gouv.fr thawte certum
+-SUBDIRS = spi-inc.org debconf.org mozilla cacert.org brasil.gov.br signet.pl telesec.de gouv.fr
++SUBDIRS = spi-inc.org debconf.org mozilla cacert.org brasil.gov.br signet.pl telesec.de gouv.fr thawte certum
  
  all:
  	for dir in $(SUBDIRS); do \

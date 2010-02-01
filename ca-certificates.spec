@@ -42,6 +42,7 @@ Patch3:		%{name}-c_rehash.sh.patch
 URL:		http://www.cacert.org/
 BuildRequires:	coreutils
 BuildRequires:	python
+BuildRequires:	python-modules
 BuildRequires:	unzip
 Obsoletes:	certificates
 BuildArch:	noarch

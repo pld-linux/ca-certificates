@@ -27,7 +27,7 @@
    if test -L "$PEM"
    then
      rm -f "$PEM"
-@@ -110,24 +110,18 @@
+@@ -89,6 +89,7 @@
    do
       case $(readlink $symlink) in
       $CERTSDIR*) rm -f $symlink;;

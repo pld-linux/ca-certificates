@@ -1,5 +1,3 @@
-# TODO
-# - cleanup dead links from /etc/openssl/certs after -update uninstall
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
@@ -131,7 +129,7 @@ find . -name '*.crt' -print0 | xargs -0 cat
 rm -rf $RPM_BUILD_ROOT
 
 %post update
-%{_sbindir}/update-ca-certificates || :
+%{_sbindir}/update-ca-certificates --fresh || :
 
 %files
 %defattr(644,root,root,755)

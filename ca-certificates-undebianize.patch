@@ -2,17 +2,15 @@ diff -ur ca-certificates/sbin/update-ca-certificates ca-certificates-undebianize
 --- ca-certificates/sbin/update-ca-certificates	2008-04-11 20:47:29.000000000 +0200
 +++ ca-certificates-undebianize/sbin/update-ca-certificates	2008-11-01 12:17:37.000000000 +0100
 @@ -38,7 +38,7 @@
- CERTSCONF=/etc/ca-certificates.conf
  CERTSDIR=/usr/share/ca-certificates
  LOCALCERTSDIR=/usr/local/share/ca-certificates
--CERTBUNDLE=ca-certificates.crt
+ CERTBUNDLE=ca-certificates.crt
 -ETCCERTSDIR=/etc/ssl/certs
-+CERTBUNDLE=/etc/openssl/ca-certificates.crt
 +ETCCERTSDIR=/etc/openssl/certs
  
  cleanup() {
    rm -f "$TEMPBUNDLE"
-@@ -88,17 +88,6 @@
+@@ -88,16 +88,6 @@
  fi
  
  echo "$ADDED_CNT added, $REMOVED_CNT removed; done."
@@ -21,15 +19,14 @@ diff -ur ca-certificates/sbin/update-ca-certificates ca-certificates-undebianize
 -echo -n "Running hooks in $HOOKSDIR...."
 -VERBOSE_ARG=
 -[ "$verbose" = 0 ] || VERBOSE_ARG=--verbose
--eval run-parts $VERB_ARG --test -- $HOOKSDIR | while read hook
+-eval run-parts $VERBOSE_ARG --test -- $HOOKSDIR | while read hook
 -do
 -  ( cat $ADDED
 -    cat $REMOVED ) | $hook || echo E: $hook exited with code $?.
 -done
--echo "done."
+ echo "done."
  
  # vim:set et sw=2:
- 
 diff -ur ca-certificates/sbin/update-ca-certificates.8 ca-certificates-undebianize/sbin/update-ca-certificates.8
 --- ca-certificates/sbin/update-ca-certificates.8	2008-04-11 20:47:29.000000000 +0200
 +++ ca-certificates-undebianize/sbin/update-ca-certificates.8	2008-11-01 12:18:14.000000000 +0100

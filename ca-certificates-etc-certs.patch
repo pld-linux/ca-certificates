@@ -6,7 +6,7 @@
  CERTSDIR=/usr/share/ca-certificates
 -LOCALCERTSDIR=/usr/local/share/ca-certificates
 +LOCALCERTSDIR=/etc/certs
- CERTBUNDLE=/etc/openssl/ca-certificates.crt
+ CERTBUNDLE=ca-certificates.crt
  ETCCERTSDIR=/etc/openssl/certs
  cd $ETCCERTSDIR
 @@ -62,7 +62,7 @@

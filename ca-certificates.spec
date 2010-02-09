@@ -4,7 +4,7 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20090814
-Release:	3
+Release:	4
 License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
@@ -39,10 +39,11 @@ Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
 Patch3:		%{name}-c_rehash.sh.patch
+Patch4:		%{name}-endline.patch
 URL:		http://www.cacert.org/
-BuildRequires:	coreutils
 BuildRequires:	python
 BuildRequires:	python-modules
+BuildRequires:	sed >= 4.0
 BuildRequires:	unzip
 Obsoletes:	certificates
 BuildArch:	noarch
@@ -76,6 +77,7 @@ Skrypt i dane do odświeżania bazy certyfikatów CA.
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
+%patch4 -p1
 
 %{__unzip} -qq %{SOURCE1} -d thawte
 # resolve file name clash
@@ -84,8 +86,7 @@ mv 'thawte/Thawte Roots/Thawte Extended Validation/thawte Primary Root CA - G1 (
 
 find thawte/ -name *.pem | while read f ; do
 	ff=$(echo $f | sed -e 's|[ ,]|_|g' -e 's|[()]|=|g')
-	fff="thawte/$(basename "$ff" .pem).crt"
-	tr -d '\r' < "$f" > "$fff"
+	cp "$f" "thawte/$(basename "$ff" .pem).crt"
 done
 
 install -d certum
@@ -117,6 +118,8 @@ install -d $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_sbindir},%{certsdir}}
 
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+find $RPM_BUILD_ROOT%{_datadir}/ca-certificates -name '*.crt' -exec sed -i -e 's/\r$//' {} \;
 
 (
 cd $RPM_BUILD_ROOT%{_datadir}/ca-certificates

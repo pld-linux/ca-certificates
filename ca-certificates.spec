@@ -4,7 +4,7 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20090814
-Release:	4
+Release:	5
 License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
@@ -126,10 +126,10 @@ cd $RPM_BUILD_ROOT%{_datadir}/ca-certificates
 find . -name '*.crt' | sort | cut -b3-
 ) > $RPM_BUILD_ROOT%{_sysconfdir}/ca-certificates.conf
 
-(
-cd $RPM_BUILD_ROOT%{_datadir}/ca-certificates
-find . -name '*.crt' -print0 | xargs -0 cat
-) > $RPM_BUILD_ROOT%{certsdir}/ca-certificates.crt
+find $RPM_BUILD_ROOT%{_datadir}/ca-certificates -name '*.crt' | while read cert ; do
+	cat "$cert" >> $RPM_BUILD_ROOT%{certsdir}/ca-certificates.crt
+	echo >>$RPM_BUILD_ROOT%{certsdir}/ca-certificates.crt
+done
 
 %clean
 rm -rf $RPM_BUILD_ROOT

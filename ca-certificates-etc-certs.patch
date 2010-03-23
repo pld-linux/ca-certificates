@@ -24,7 +24,7 @@
  add() {
    CERT="$1"
 -  PEM="$ETCCERTSDIR/$(basename "$CERT" .crt | sed -e 's/ /_/g' \
-+  PEM="$ETCCERTSDIR/$(basename "$CERT" .pem | sed -e 's/.crt$/.pem/' -e 's/ /_/g' \
++  PEM="$ETCCERTSDIR/$(basename "$CERT" .pem | sed -e 's/.crt$//' -e 's/ /_/g' \
                                                    -e 's/[()]/=/g' \
                                                    -e 's/,/_/g').pem"
    if ! test -e "$PEM" || [ "$(readlink "$PEM")" != "$CERT" ]
@@ -33,7 +33,7 @@
  remove() {
    CERT="$1"
 -  PEM="$ETCCERTSDIR/$(basename "$CERT" .crt).pem"
-+  PEM="$ETCCERTSDIR/$(basename "$CERT" .pem | sed 's/.crt$/.pem/').pem"
++  PEM="$ETCCERTSDIR/$(basename "$CERT" .pem | sed 's/.crt$//').pem"
    if test -L "$PEM"
    then
      rm -f "$PEM"

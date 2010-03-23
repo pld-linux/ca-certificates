@@ -4,7 +4,7 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20090814
-Release:	5
+Release:	6
 License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
@@ -35,12 +35,24 @@ Source12:	http://www.certum.pl/keys/class3.pem
 # Source12-md5:	07bc97e21da092ba53535c7379e1b58b
 Source13:	http://www.certum.pl/keys/class4.pem
 # Source13-md5:	99ef61d509539af89f1c025b67245965
+Source14:	http://crt.tcs.terena.org/TERENASSLCA.crt
+# Source14-md5:	f62cd1546a8ef14e31ba1ce8eecd234a
+Source15:	http://crt.tcs.terena.org/TERENAeScienceSSLCA.crt
+# Source15-md5:	5feea35ab01a373f115219706f1f57bd
+Source16:	http://crt.tcs.terena.org/TERENAPersonalCA.crt
+# Source16-md5:	53eaa497c8fb0b79f14fe9f69693689a
+Source17:	http://crt.tcs.terena.org/TERENAeSciencePersonalCA.crt
+# Source17-md5:	e25cc655d3ebe920ca9c187e3dde9191
+Source18:	http://crt.tcs.terena.org/TERENACodeSigningCA.crt
+# Source18-md5:	74c9f511ab03a4e6b7462e310abfa89b
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
 Patch3:		%{name}-c_rehash.sh.patch
 Patch4:		%{name}-endline.patch
+Patch5:		%{name}-mozilla.patch
 URL:		http://www.cacert.org/
+BuildRequires:	openssl-tools
 BuildRequires:	python
 BuildRequires:	python-modules
 BuildRequires:	sed >= 4.0
@@ -78,6 +90,7 @@ Skrypt i dane do odświeżania bazy certyfikatów CA.
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
+%patch5 -p1
 
 %{__unzip} -qq %{SOURCE1} -d thawte
 # resolve file name clash
@@ -106,11 +119,18 @@ for a in certum/*.pem; do
 	mv "$a" "${a%.pem}.crt"
 done
 
+install -d terena
+openssl x509 -inform DER -in %{SOURCE14} -outform PEM -out terena/$(basename %{SOURCE14})
+openssl x509 -inform DER -in %{SOURCE15} -outform PEM -out terena/$(basename %{SOURCE15})
+openssl x509 -inform DER -in %{SOURCE16} -outform PEM -out terena/$(basename %{SOURCE16})
+openssl x509 -inform DER -in %{SOURCE17} -outform PEM -out terena/$(basename %{SOURCE17})
+openssl x509 -inform DER -in %{SOURCE18} -outform PEM -out terena/$(basename %{SOURCE18})
+
 %build
 %{__make}
 
 # We have those and more in specific dirs
-rm mozilla/{Thawte,thawte,Certum}*.crt
+rm mozilla/{Thawte,thawte,Certum,IGC_A,Deutsche_Telekom_Root_CA_2}*.crt
 
 %install
 rm -rf $RPM_BUILD_ROOT

@@ -1,5 +1,9 @@
 # TODO
 # - cleanup dead links from /etc/openssl/certs after -update uninstall
+#
+# - https://bugzilla.mozilla.org/show_bug.cgi?id=549701 and
+#   http://groups.google.com/group/mozilla.dev.security.policy/browse_thread/thread/b6493a285ba79998#
+#
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
@@ -131,6 +135,9 @@ openssl x509 -inform DER -in %{SOURCE18} -outform PEM -out terena/$(basename %{S
 
 # We have those and more in specific dirs
 rm mozilla/{Thawte,thawte,Certum,IGC_A,Deutsche_Telekom_Root_CA_2}*.crt
+
+# See TODO
+# rm mozilla/RSA_Security_1024_v3.crt
 
 %install
 rm -rf $RPM_BUILD_ROOT

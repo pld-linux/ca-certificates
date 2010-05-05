@@ -8,7 +8,7 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20090814
-Release:	6
+Release:	6.4
 License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
@@ -61,6 +61,7 @@ Patch2:		%{name}-etc-certs.patch
 Patch3:		%{name}-c_rehash.sh.patch
 Patch4:		%{name}-endline.patch
 Patch5:		%{name}-mozilla.patch
+Patch6:		%{name}-DESTDIR.patch
 URL:		http://www.cacert.org/
 BuildRequires:	openssl-tools
 BuildRequires:	python
@@ -72,6 +73,7 @@ BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		certsdir	/etc/certs
+%define		openssldir	/etc/openssl/certs
 
 %description
 Common CA Certificates PEM files.
@@ -101,6 +103,7 @@ Skrypt i dane do odświeżania bazy certyfikatów CA.
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %{__unzip} -qq %{SOURCE1} -d thawte
 # resolve file name clash
@@ -141,7 +144,7 @@ openssl x509 -inform DER -in %{SOURCE18} -outform PEM -out terena/$(basename %{S
 install -d esteid
 cp -a %{SOURCE19} esteid
 cp -a %{SOURCE20} esteid
-cp -a %{SOURCE21} esteid
+cp -a %{SOURCE21} esteid/ESTEID-SK_2007.crt
 for a in esteid/*.PEM.cer; do
 	mv "$a" "${a%.PEM.cer}.crt"
 done
@@ -169,10 +172,10 @@ cd $RPM_BUILD_ROOT%{_datadir}/ca-certificates
 find . -name '*.crt' | sort | cut -b3-
 ) > $RPM_BUILD_ROOT%{_sysconfdir}/ca-certificates.conf
 
-find $RPM_BUILD_ROOT%{_datadir}/ca-certificates -name '*.crt' | while read cert ; do
-	cat "$cert" >> $RPM_BUILD_ROOT%{certsdir}/ca-certificates.crt
-	echo >>$RPM_BUILD_ROOT%{certsdir}/ca-certificates.crt
-done
+# build %{certsdir}/ca-certificates.crt
+install -d $RPM_BUILD_ROOT%{openssldir}
+./sbin/update-ca-certificates --destdir $RPM_BUILD_ROOT
+rm -rf $RPM_BUILD_ROOT%{openssldir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT

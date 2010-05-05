@@ -49,6 +49,12 @@ Source17:	http://crt.tcs.terena.org/TERENAeSciencePersonalCA.crt
 # Source17-md5:	e25cc655d3ebe920ca9c187e3dde9191
 Source18:	http://crt.tcs.terena.org/TERENACodeSigningCA.crt
 # Source18-md5:	74c9f511ab03a4e6b7462e310abfa89b
+Source19:	http://www.sk.ee/files/JUUR-SK.PEM.cer
+# Source19-md5:	805784c06c9eff3771a4b9bd631cd3f5
+Source20:	http://www.sk.ee/files/ESTEID-SK.PEM.cer
+# Source20-md5:	387beee5b8539ab7d91628f486295899
+Source21:	http://www.sk.ee/files/ESTEID-SK%202007.PEM.cer
+# Source21-md5:	2b1a2a77f565d68fdf5f19f6cc3a5600
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
@@ -107,18 +113,18 @@ find thawte/ -name *.pem | while read f ; do
 done
 
 install -d certum
-install %{SOURCE2} certum
-install %{SOURCE3} certum
-install %{SOURCE4} certum
-install %{SOURCE5} certum
-install %{SOURCE6} certum
-install %{SOURCE7} certum
-install %{SOURCE8} certum
-install %{SOURCE9} certum
-install %{SOURCE10} certum
-install %{SOURCE11} certum
-install %{SOURCE12} certum
-install %{SOURCE13} certum
+cp -a %{SOURCE2} certum
+cp -a %{SOURCE3} certum
+cp -a %{SOURCE4} certum
+cp -a %{SOURCE5} certum
+cp -a %{SOURCE6} certum
+cp -a %{SOURCE7} certum
+cp -a %{SOURCE8} certum
+cp -a %{SOURCE9} certum
+cp -a %{SOURCE10} certum
+cp -a %{SOURCE11} certum
+cp -a %{SOURCE12} certum
+cp -a %{SOURCE13} certum
 for a in certum/*.pem; do
 	mv "$a" "${a%.pem}.crt"
 done
@@ -129,6 +135,16 @@ openssl x509 -inform DER -in %{SOURCE15} -outform PEM -out terena/$(basename %{S
 openssl x509 -inform DER -in %{SOURCE16} -outform PEM -out terena/$(basename %{SOURCE16})
 openssl x509 -inform DER -in %{SOURCE17} -outform PEM -out terena/$(basename %{SOURCE17})
 openssl x509 -inform DER -in %{SOURCE18} -outform PEM -out terena/$(basename %{SOURCE18})
+
+# http://www.sk.ee/pages.php/0203040502#Root_certificates
+# JUUR-SK, ESTEID-SK and ESTEID-SK 2007
+install -d esteid
+cp -a %{SOURCE19} esteid
+cp -a %{SOURCE20} esteid
+cp -a %{SOURCE21} esteid
+for a in esteid/*.PEM.cer; do
+	mv "$a" "${a%.PEM.cer}.crt"
+done
 
 %build
 %{__make}

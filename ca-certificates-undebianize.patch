@@ -72,7 +72,7 @@
  .TP
  .B \-f, \-\-fresh
 -Fresh updates.  Remove symlinks in /etc/ssl/certs directory.
-+Fresh updates.  Remove symlinks in /etc/openss/certs directory.
++Fresh updates.  Remove symlinks in /etc/openssl/certs directory.
  .SH FILES
  .TP
  .I /etc/ca-certificates.conf

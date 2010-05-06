@@ -8,7 +8,7 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20090814
-Release:	8
+Release:	9
 License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
@@ -63,12 +63,11 @@ Patch4:		%{name}-endline.patch
 Patch5:		%{name}-mozilla.patch
 Patch6:		%{name}-DESTDIR.patch
 URL:		http://www.cacert.org/
-BuildRequires:	openssl-tools >= 1.0.0
+BuildRequires:	openssl-tools
 BuildRequires:	python
 BuildRequires:	python-modules
 BuildRequires:	sed >= 4.0
 BuildRequires:	unzip
-Conflicts:	openssl < 1.0.0
 Obsoletes:	certificates
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -88,7 +87,7 @@ Summary(pl.UTF-8):	Skrypt do odświeżania bazy certyfikatów CA
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	mktemp
-Requires:	openssl-tools >= 1.0.0
+Requires:	openssl-tools >= 0.9.8i-3
 
 %description update
 Script and data for updating CA Certificates database.

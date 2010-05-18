@@ -25,12 +25,12 @@
 -CERTSDIR=/usr/share/ca-certificates
 -LOCALCERTSDIR=/etc/certs
 -CERTBUNDLE=/etc/certs/ca-certificates.crt
--ETCCERTSDIR=/etc/openssl/certs
+-ETCCERTSDIR=@openssldir@
 +CERTSCONF=$DESTDIR/etc/ca-certificates.conf
 +CERTSDIR=$DESTDIR/usr/share/ca-certificates
 +LOCALCERTSDIR=$DESTDIR/etc/certs
 +CERTBUNDLE=$DESTDIR/etc/certs/ca-certificates.crt
-+ETCCERTSDIR=$DESTDIR/etc/openssl/certs
++ETCCERTSDIR=$DESTDIR@openssldir@
  
  cleanup() {
    rm -f "$TEMPBUNDLE"

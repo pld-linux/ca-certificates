@@ -8,7 +8,7 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20090814
-Release:	9
+Release:	10
 License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
@@ -66,6 +66,7 @@ URL:		http://www.cacert.org/
 BuildRequires:	openssl-tools
 BuildRequires:	python
 BuildRequires:	python-modules
+BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	sed >= 4.0
 BuildRequires:	unzip
 Obsoletes:	certificates
@@ -73,7 +74,11 @@ BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		certsdir	/etc/certs
+%if "%{pld_release}" == "th"
 %define		openssldir	/etc/openssl/certs
+%else
+%define		openssldir	/var/lib/openssl/certs
+%endif
 
 %description
 Common CA Certificates PEM files.
@@ -87,7 +92,11 @@ Summary(pl.UTF-8):	Skrypt do odświeżania bazy certyfikatów CA
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	mktemp
+%if "%{pld_release}" == "ac"
+Requires:	openssl-tools >= 0.9.7m-2
+%else
 Requires:	openssl-tools >= 0.9.8i-3
+%endif
 
 %description update
 Script and data for updating CA Certificates database.
@@ -104,6 +113,8 @@ Skrypt i dane do odświeżania bazy certyfikatów CA.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+
+%{__sed} -i -e 's,@openssldir@,%{openssldir},' sbin/update-ca-certificates*
 
 %{__unzip} -qq %{SOURCE1} -d thawte
 # resolve file name clash

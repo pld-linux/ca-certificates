@@ -5,7 +5,7 @@
  LOCALCERTSDIR=/usr/local/share/ca-certificates
  CERTBUNDLE=ca-certificates.crt
 -ETCCERTSDIR=/etc/ssl/certs
-+ETCCERTSDIR=/etc/openssl/certs
++ETCCERTSDIR=@openssldir@
  
  cleanup() {
    rm -f "$TEMPBUNDLE"
@@ -14,7 +14,7 @@
  
  # Adds a certificate to the list of trusted ones.  This includes a symlink
 -# in /etc/ssl/certs to the certificate file and its inclusion into the
-+# in /etc/openssl/certs to the certificate file and its inclusion into the
++# in @openssldir@ to the certificate file and its inclusion into the
  # bundle.
  add() {
    CERT="$1"
@@ -42,7 +42,7 @@
  .\" for manpage-specific macros, see man(7)
  .SH NAME
 -update-ca-certificates \- update /etc/ssl/certs and certificates.crt
-+update-ca-certificates \- update /etc/openssl/certs and ca-certificates.crt
++update-ca-certificates \- update @openssldir@ and ca-certificates.crt
  .SH SYNOPSIS
  .B update-ca-certificates
  .RI [ options ]
@@ -51,7 +51,7 @@
  .PP
  \fBupdate-ca-certificates\fP is a program that updates the directory
 -/etc/ssl/certs to hold SSL certificates and generates certificates.crt,
-+/etc/openssl/certs to hold SSL certificates and generates certificates.crt,
++@openssldir@ to hold SSL certificates and generates certificates.crt,
  a concatenated single-file list of certificates.
  .PP
  It reads the file /etc/ca-certificates.conf. Each line gives a pathname of
@@ -72,7 +72,7 @@
  .TP
  .B \-f, \-\-fresh
 -Fresh updates.  Remove symlinks in /etc/ssl/certs directory.
-+Fresh updates.  Remove symlinks in /etc/openssl/certs directory.
++Fresh updates.  Remove symlinks in @openssldir@ directory.
  .SH FILES
  .TP
  .I /etc/ca-certificates.conf

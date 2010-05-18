@@ -8,7 +8,7 @@
 -CERTBUNDLE=ca-certificates.crt
 +LOCALCERTSDIR=/etc/certs
 +CERTBUNDLE=/etc/certs/ca-certificates.crt
- ETCCERTSDIR=/etc/openssl/certs
+ ETCCERTSDIR=@openssldir@
  cd $ETCCERTSDIR
 @@ -52,7 +52,7 @@
  

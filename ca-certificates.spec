@@ -8,7 +8,7 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20090814
-Release:	11
+Release:	12
 License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}+nmu3.tar.gz
@@ -49,12 +49,14 @@ Source17:	http://crt.tcs.terena.org/TERENAeSciencePersonalCA.crt
 # Source17-md5:	e25cc655d3ebe920ca9c187e3dde9191
 Source18:	http://crt.tcs.terena.org/TERENACodeSigningCA.crt
 # Source18-md5:	74c9f511ab03a4e6b7462e310abfa89b
-Source19:	http://www.sk.ee/files/JUUR-SK.PEM.cer
+Source19:	http://www.sk.ee/upload/files/JUUR-SK.PEM.cer
 # Source19-md5:	805784c06c9eff3771a4b9bd631cd3f5
-Source20:	http://www.sk.ee/files/ESTEID-SK.PEM.cer
-# Source20-md5:	cf02fbe746e4e9a6e237a5b2f4b8091f
-Source21:	http://www.sk.ee/files/ESTEID-SK_2007.PEM.cer
-# Source21-md5:	cf02fbe746e4e9a6e237a5b2f4b8091f
+Source20:	http://www.sk.ee/upload/files/ESTEID-SK.PEM.cer
+# Source20-md5:	387beee5b8539ab7d91628f486295899
+Source21:	http://www.sk.ee/upload/files/ESTEID-SK%202007.PEM.cer
+# Source21-md5:	2b1a2a77f565d68fdf5f19f6cc3a5600
+Source22:	http://www.sk.ee/upload/files/ESTEID-SK%202011.pem.cer
+# Source22-md5:	cfcc1e592cb0ff305158a7e32730546c
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
@@ -153,6 +155,7 @@ install -d esteid
 cp -a %{SOURCE19} esteid
 cp -a %{SOURCE20} esteid
 cp -a %{SOURCE21} esteid/ESTEID-SK_2007.crt
+cp -a %{SOURCE22} esteid/ESTEID-SK_2011.crt
 for a in esteid/*.PEM.cer; do
 	mv "$a" "${a%.PEM.cer}.crt"
 done

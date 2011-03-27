@@ -8,13 +8,13 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20090814
-Release:	10
+Release:	11
 License:	distributable
 Group:		Libraries
-Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
-# Source0-md5:	307052c985bec7f9a00eb84293eef779
+Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}+nmu3.tar.gz
+# Source0-md5:	578be1c5a459cea3b243777c08610727
 Source1:	https://www.verisign.com/support/thawte-roots.zip
-# Source1-md5:	3e50e5facce6b6bfbf68271d066005fa
+# Source1-md5:	a3709cc0279ef3fca4f86ea775066b18
 Source2:	http://www.certum.pl/keys/CA.pem
 # Source2-md5:	35610177afc9c64e70f1ce62c1885496
 Source3:	http://www.certum.pl/keys/level1.pem
@@ -52,9 +52,9 @@ Source18:	http://crt.tcs.terena.org/TERENACodeSigningCA.crt
 Source19:	http://www.sk.ee/files/JUUR-SK.PEM.cer
 # Source19-md5:	805784c06c9eff3771a4b9bd631cd3f5
 Source20:	http://www.sk.ee/files/ESTEID-SK.PEM.cer
-# Source20-md5:	387beee5b8539ab7d91628f486295899
+# Source20-md5:	cf02fbe746e4e9a6e237a5b2f4b8091f
 Source21:	http://www.sk.ee/files/ESTEID-SK_2007.PEM.cer
-# Source21-md5:	2b1a2a77f565d68fdf5f19f6cc3a5600
+# Source21-md5:	cf02fbe746e4e9a6e237a5b2f4b8091f
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
@@ -105,7 +105,7 @@ Script and data for updating CA Certificates database.
 Skrypt i dane do odświeżania bazy certyfikatów CA.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}+nmu3
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -117,9 +117,6 @@ Skrypt i dane do odświeżania bazy certyfikatów CA.
 %{__sed} -i -e 's,@openssldir@,%{openssldir},' sbin/update-ca-certificates*
 
 %{__unzip} -qq %{SOURCE1} -d thawte
-# resolve file name clash
-mv 'thawte/Thawte Roots/Thawte Extended Validation/thawte Primary Root CA - G1 (EV)/thawte_Primary_Root_CA.pem' \
-	'thawte/Thawte Roots/Thawte Extended Validation/thawte Primary Root CA - G1 (EV)/thawte_Primary_Root_CA_CC.pem'
 
 find thawte/ -name *.pem | while read f ; do
 	ff=$(echo $f | sed -e 's|[ ,]|_|g' -e 's|[()]|=|g')

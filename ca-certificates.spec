@@ -8,7 +8,7 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20090814
-Release:	12
+Release:	13
 License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}+nmu3.tar.gz
@@ -120,26 +120,33 @@ Skrypt i dane do odświeżania bazy certyfikatów CA.
 
 %{__unzip} -qq %{SOURCE1} -d thawte
 
-find thawte/ -name *.pem | while read f ; do
-	ff=$(echo $f | sed -e 's|[ ,]|_|g' -e 's|[()]|=|g')
-	cp "$f" "thawte/$(basename "$ff" .pem).crt"
+find thawte/ -name *.pem -o -name *.txt| while read f ; do
+	if (file "$f" | grep -q "PEM"); then
+		ff=$(echo $f | sed -e 's|[ ,]|_|g' -e 's|[()]|=|g')
+		nname=$(basename "$ff" .pem)
+		nname=$(basename "$nname" .txt)
+		nname=$(basename "$nname" _b64)
+		cp -i "$f" "thawte/${nname}.crt"
+	else
+		echo "Skipping $f, doesn't look like PEM CERT"
+	fi
 done
 
 install -d certum
-cp -a %{SOURCE2} certum
-cp -a %{SOURCE3} certum
-cp -a %{SOURCE4} certum
-cp -a %{SOURCE5} certum
-cp -a %{SOURCE6} certum
-cp -a %{SOURCE7} certum
-cp -a %{SOURCE8} certum
-cp -a %{SOURCE9} certum
-cp -a %{SOURCE10} certum
-cp -a %{SOURCE11} certum
-cp -a %{SOURCE12} certum
-cp -a %{SOURCE13} certum
+cp -ai %{SOURCE2} certum
+cp -ai %{SOURCE3} certum
+cp -ai %{SOURCE4} certum
+cp -ai %{SOURCE5} certum
+cp -ai %{SOURCE6} certum
+cp -ai %{SOURCE7} certum
+cp -ai %{SOURCE8} certum
+cp -ai %{SOURCE9} certum
+cp -ai %{SOURCE10} certum
+cp -ai %{SOURCE11} certum
+cp -ai %{SOURCE12} certum
+cp -ai %{SOURCE13} certum
 for a in certum/*.pem; do
-	mv "$a" "${a%.pem}.crt"
+	mv -i "$a" "${a%.pem}.crt"
 done
 
 install -d terena
@@ -152,12 +159,12 @@ openssl x509 -inform DER -in %{SOURCE18} -outform PEM -out terena/$(basename %{S
 # http://www.sk.ee/pages.php/0203040502#Root_certificates
 # JUUR-SK, ESTEID-SK and ESTEID-SK 2007
 install -d esteid
-cp -a %{SOURCE19} esteid
-cp -a %{SOURCE20} esteid
-cp -a %{SOURCE21} esteid/ESTEID-SK_2007.crt
-cp -a %{SOURCE22} esteid/ESTEID-SK_2011.crt
+cp -ai %{SOURCE19} esteid
+cp -ai %{SOURCE20} esteid
+cp -ai %{SOURCE21} esteid/ESTEID-SK_2007.crt
+cp -ai %{SOURCE22} esteid/ESTEID-SK_2011.crt
 for a in esteid/*.PEM.cer; do
-	mv "$a" "${a%.PEM.cer}.crt"
+	mv -i "$a" "${a%.PEM.cer}.crt"
 done
 
 %build

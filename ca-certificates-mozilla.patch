@@ -1,14 +1,5 @@
 --- ca-certificates-20090814/mozilla/certdata.txt.old	2009-06-24 12:32:03.000000000 +0200
 +++ ca-certificates-20090814/mozilla/certdata.txt	2009-08-31 20:28:47.000000000 +0200
-@@ -34,7 +34,7 @@
- # the terms of any one of the MPL, the GPL or the LGPL.
- #
- # ***** END LICENSE BLOCK *****
--CVS_ID "@(#) $RCSfile$ $Revision$ $Date$"
-+CVS_ID "@(#) $RCSfile$ $Revision$ $Date$"
- 
- #
- # certdata.txt
 @@ -14086,7 +14086,7 @@
  END
  CKA_TRUST_SERVER_AUTH CK_TRUST CKT_NETSCAPE_TRUSTED_DELEGATOR

@@ -126,25 +126,25 @@ find thawte/ -name *.pem -o -name *.txt| while read f ; do
 		nname=$(basename "$ff" .pem)
 		nname=$(basename "$nname" .txt)
 		nname=$(basename "$nname" _b64)
-		cp -i "$f" "thawte/${nname}.crt"
+		cp -pi "$f" "thawte/${nname}.crt"
 	else
 		echo "Skipping $f, doesn't look like PEM CERT"
 	fi
 done
 
 install -d certum
-cp -ai %{SOURCE2} certum
-cp -ai %{SOURCE3} certum
-cp -ai %{SOURCE4} certum
-cp -ai %{SOURCE5} certum
-cp -ai %{SOURCE6} certum
-cp -ai %{SOURCE7} certum
-cp -ai %{SOURCE8} certum
-cp -ai %{SOURCE9} certum
-cp -ai %{SOURCE10} certum
-cp -ai %{SOURCE11} certum
-cp -ai %{SOURCE12} certum
-cp -ai %{SOURCE13} certum
+cp -pi %{SOURCE2} certum
+cp -pi %{SOURCE3} certum
+cp -pi %{SOURCE4} certum
+cp -pi %{SOURCE5} certum
+cp -pi %{SOURCE6} certum
+cp -pi %{SOURCE7} certum
+cp -pi %{SOURCE8} certum
+cp -pi %{SOURCE9} certum
+cp -pi %{SOURCE10} certum
+cp -pi %{SOURCE11} certum
+cp -pi %{SOURCE12} certum
+cp -pi %{SOURCE13} certum
 for a in certum/*.pem; do
 	mv -i "$a" "${a%.pem}.crt"
 done
@@ -156,13 +156,13 @@ openssl x509 -inform DER -in %{SOURCE16} -outform PEM -out terena/$(basename %{S
 openssl x509 -inform DER -in %{SOURCE17} -outform PEM -out terena/$(basename %{SOURCE17})
 openssl x509 -inform DER -in %{SOURCE18} -outform PEM -out terena/$(basename %{SOURCE18})
 
-# http://www.sk.ee/pages.php/0203040502#Root_certificates
-# JUUR-SK, ESTEID-SK and ESTEID-SK 2007
+# http://www.sk.ee/en/Repository/certs/rootcertificates
+# JUUR-SK, ESTEID-SK and ESTEID-SK 2007, ESTEID-SK 2011
 install -d esteid
-cp -ai %{SOURCE19} esteid
-cp -ai %{SOURCE20} esteid
-cp -ai %{SOURCE21} esteid/ESTEID-SK_2007.crt
-cp -ai %{SOURCE22} esteid/ESTEID-SK_2011.crt
+cp -pi %{SOURCE19} esteid
+cp -pi %{SOURCE20} esteid
+cp -pi %{SOURCE21} esteid/ESTEID-SK_2007.crt
+cp -pi %{SOURCE22} esteid/ESTEID-SK_2011.crt
 for a in esteid/*.PEM.cer; do
 	mv -i "$a" "${a%.PEM.cer}.crt"
 done

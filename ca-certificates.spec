@@ -171,7 +171,7 @@ done
 %{__make}
 
 # We have those and more in specific dirs
-rm mozilla/{Thawte,thawte,Certum,IGC_A,Deutsche_Telekom_Root_CA_2}*.crt
+rm mozilla/{Thawte,thawte,Certum,IGC_A,Deutsche_Telekom_Root_CA_2,Juur-SK}*.crt
 
 # See TODO
 # rm mozilla/RSA_Security_1024_v3.crt

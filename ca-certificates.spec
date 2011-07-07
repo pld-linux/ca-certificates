@@ -1,5 +1,8 @@
 # TODO
 # - cleanup dead links from /etc/openssl/certs after -update uninstall
+# - deal with removed (renamed) certs on upgrade (as new config is created as
+#   .rpmnew). create some merge tool (or split /etc/ca-certificates.conf to
+#   /etc/ca-certificates.d): http://pastebin.com/04hZd2x0
 #
 # - https://bugzilla.mozilla.org/show_bug.cgi?id=549701 and
 #   http://groups.google.com/group/mozilla.dev.security.policy/browse_thread/thread/b6493a285ba79998#

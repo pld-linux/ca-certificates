@@ -1,0 +1,14 @@
+TODO:
+
+add these certs from amsn amsn-0.98.4/ca-certs:
+lrwxrwxrwx 1 glen glen   44 dets   8  2010 37621ded.0 -> VeriSign_International_Server_Class_3_CA.pem
+lrwxrwxrwx 1 glen glen   42 dets   8  2010 6e7f22c1.0 -> VeriSign_Class3_Extended_Validation_CA.pem
+lrwxrwxrwx 1 glen glen   32 dets   8  2010 75ced341.0 -> Microsoft_Internet_Authority.pem
+lrwxrwxrwx 1 glen glen   37 dets   8  2010 874806e2.0 -> Microsoft_Secure_Server_Authority.pem
+-rw-r--r-- 1 glen glen 1,8K märts 11  2010 Microsoft_Internet_Authority.pem
+-rw-r--r-- 1 glen glen 2,2K märts 11  2010 Microsoft_Secure_Server_Authority.pem
+-rw-r--r-- 1 glen glen 2,1K märts 11  2010 VeriSign_Class3_Extended_Validation_CA.pem
+-rw-r--r-- 1 glen glen 1,3K märts 11  2010 VeriSign_International_Server_Class_3_CA.pem
+
+this already present:
+rm -f GTE_CyberTrust_Global_Root.pem c692a373.0

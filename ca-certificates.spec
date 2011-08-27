@@ -6,6 +6,7 @@
 #
 # - https://bugzilla.mozilla.org/show_bug.cgi?id=549701 and
 #   http://groups.google.com/group/mozilla.dev.security.policy/browse_thread/thread/b6493a285ba79998#
+# - add certs noted in TODO file
 #
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA

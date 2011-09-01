@@ -9,6 +9,7 @@ lrwxrwxrwx 1 glen glen   37 dets   8  2010 874806e2.0 -> Microsoft_Secure_Server
 -rw-r--r-- 1 glen glen 2,2K märts 11  2010 Microsoft_Secure_Server_Authority.pem
 -rw-r--r-- 1 glen glen 2,1K märts 11  2010 VeriSign_Class3_Extended_Validation_CA.pem
 -rw-r--r-- 1 glen glen 1,3K märts 11  2010 VeriSign_International_Server_Class_3_CA.pem
+http://amsn.svn.sourceforge.net/viewvc/amsn/trunk/amsn/ca-certs/
 
 this already present:
 rm -f GTE_CyberTrust_Global_Root.pem c692a373.0

@@ -1,6 +1,9 @@
 TODO:
 
-add these certs from amsn amsn-0.98.4/ca-certs:
+add these certs from amsn
+http://amsn.svn.sourceforge.net/viewvc/amsn/trunk/amsn/ca-certs/
+svn co https://amsn.svn.sourceforge.net/svnroot/amsn/trunk/amsn/ca-certs amsn-certs
+amsn-0.98.4/ca-certs:
 lrwxrwxrwx 1 glen glen   44 dets   8  2010 37621ded.0 -> VeriSign_International_Server_Class_3_CA.pem
 lrwxrwxrwx 1 glen glen   42 dets   8  2010 6e7f22c1.0 -> VeriSign_Class3_Extended_Validation_CA.pem
 lrwxrwxrwx 1 glen glen   32 dets   8  2010 75ced341.0 -> Microsoft_Internet_Authority.pem
@@ -9,12 +12,15 @@ lrwxrwxrwx 1 glen glen   37 dets   8  2010 874806e2.0 -> Microsoft_Secure_Server
 -rw-r--r-- 1 glen glen 2,2K märts 11  2010 Microsoft_Secure_Server_Authority.pem
 -rw-r--r-- 1 glen glen 2,1K märts 11  2010 VeriSign_Class3_Extended_Validation_CA.pem
 -rw-r--r-- 1 glen glen 1,3K märts 11  2010 VeriSign_International_Server_Class_3_CA.pem
-http://amsn.svn.sourceforge.net/viewvc/amsn/trunk/amsn/ca-certs/
 
 this already present:
 rm -f GTE_CyberTrust_Global_Root.pem c692a373.0
 
-add these certs from pidgin-2.10.0/share/ca-certs:
+
+add these certs from pidgin
+http://developer.pidgin.im/viewmtn/revision/browse/d3dccc0843de29ce8d5c7e2e017028396dc2b46b/share/ca-certs
+pidgin-2.10.0/share/ca-certs:
+
 lrwxrwxrwx 1 glen users   29 Aug 27 18:15 1445ed77.0 -> DigiCertHighAssuranceCA-3.pem
 lrwxrwxrwx 1 glen users   37 Aug 27 18:15 3ac0e112.0 -> Microsoft_Secure_Server_Authority.pem
 lrwxrwxrwx 1 glen users   42 Aug 27 18:15 3ac0e112.1 -> Microsoft_Secure_Server_Authority_2010.pem
@@ -34,4 +40,3 @@ lrwxrwxrwx 1 glen users   37 Aug 27 18:15 f4039b98.1 -> Microsoft_Internet_Autho
 -rw-r--r-- 1 glen users 2.1K Aug 18 11:51 VeriSign_Class3_Extended_Validation_CA.pem
 -rw-r--r-- 1 glen users 1.3K Aug 18 11:51 VeriSign_International_Server_Class_3_CA.pem
 
-http://developer.pidgin.im/viewmtn/revision/browse/d3dccc0843de29ce8d5c7e2e017028396dc2b46b/share/ca-certs

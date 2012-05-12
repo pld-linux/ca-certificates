@@ -1,9 +1,5 @@
 # TODO
 # - cleanup dead links from /etc/openssl/certs after -update uninstall
-# - deal with removed (renamed) certs on upgrade (as new config is created as
-#   .rpmnew). create some merge tool (or split /etc/ca-certificates.conf to
-#   /etc/ca-certificates.d): http://pastebin.com/04hZd2x0
-#
 # - https://bugzilla.mozilla.org/show_bug.cgi?id=549701 and
 #   http://groups.google.com/group/mozilla.dev.security.policy/browse_thread/thread/b6493a285ba79998#
 # - add certs noted in TODO file
@@ -68,6 +64,7 @@ Patch3:		%{name}-c_rehash.sh.patch
 Patch4:		%{name}-endline.patch
 Patch5:		%{name}-mozilla.patch
 Patch6:		%{name}-DESTDIR.patch
+Patch7:		%{name}.d.patch
 URL:		http://www.cacert.org/
 BuildRequires:	openssl-tools
 BuildRequires:	python
@@ -119,6 +116,7 @@ Skrypt i dane do odświeżania bazy certyfikatów CA.
 %patch4 -p1
 %patch5 -p1
 %patch6 -p1
+%patch7 -p1
 
 %{__sed} -i -e 's,@openssldir@,%{openssldir},' sbin/update-ca-certificates*
 
@@ -182,8 +180,7 @@ rm mozilla/{Thawte,thawte,Certum,IGC_A,Deutsche_Telekom_Root_CA_2,Juur-SK}*.crt
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_sbindir},%{certsdir}}
-
+install -d $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_sbindir},%{certsdir},%{_sysconfdir}/ca-certificates.d}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
@@ -214,4 +211,5 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_sbindir}/update-ca-certificates
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ca-certificates.conf
+%dir %{_sysconfdir}/ca-certificates.d
 %{_datadir}/ca-certificates

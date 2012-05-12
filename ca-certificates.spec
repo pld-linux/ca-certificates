@@ -11,12 +11,12 @@
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
-Version:	20110502+nmu1
+Version:	20120212
 Release:	1
 License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
-# Source0-md5:	13aed718a5cdd05b4086c93dafd4e1e2
+# Source0-md5:	391dea8d827db935ca0d0d1e6641bf23
 Source1:	https://www.verisign.com/support/thawte-roots.zip
 # Source1-md5:	a3709cc0279ef3fca4f86ea775066b18
 Source2:	http://www.certum.pl/keys/CA.pem
@@ -207,6 +207,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%doc debian/README.Debian debian/changelog
 %config(noreplace) %verify(not md5 mtime size) %{certsdir}/ca-certificates.crt
 
 %files update

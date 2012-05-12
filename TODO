@@ -40,3 +40,30 @@ lrwxrwxrwx 1 glen users   37 Aug 27 18:15 f4039b98.1 -> Microsoft_Internet_Autho
 -rw-r--r-- 1 glen users 2.1K Aug 18 11:51 VeriSign_Class3_Extended_Validation_CA.pem
 -rw-r--r-- 1 glen users 1.3K Aug 18 11:51 VeriSign_International_Server_Class_3_CA.pem
 
+
+
+
+/usr/sbin/update-ca-certificates --fresh || :
+14:12:26 root[tty3]@haarber /#  /usr/sbin/update-ca-certificates --fresh
+Clearing symlinks in /etc/openssl/certs...done.
+Updating certificates in /etc/openssl/certs... W: /usr/share/ca-certificates/mozilla/DigiNotar_Root_CA.crt or /etc/certs/mozilla/DigiNotar_Root_CA.crt not found, but listed in /etc/ca-certificates.conf.
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+WARNING: can't open config file: /etc/openssl/openssl.cnf
+14:12:31 root[tty3]@haarber /# rpm -qf /etc/openssl/openssl.cnf
+openssl-tools-1.0.0g-1.x86_64
+
+

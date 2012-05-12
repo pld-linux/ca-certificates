@@ -1,5 +1,5 @@
---- ca-certificates/sbin/update-ca-certificates	2008-11-01 18:39:19.000000000 +0100
-+++ ca-certificates/sbin/update-ca-certificates-local	2008-11-01 19:17:39.138384960 +0100
+--- ca-certificates-20120212/sbin/update-ca-certificates~	2012-05-12 11:41:03.000000000 +0300
++++ ca-certificates-20120212/sbin/update-ca-certificates	2012-05-12 11:43:10.517657520 +0300
 @@ -37,7 +37,7 @@
  
  CERTSCONF=/etc/ca-certificates.conf
@@ -52,12 +52,12 @@
 -  if ! test -f "$CERTSDIR/$crt"
 +  if test -f "$CERTSDIR/$crt"
    then
+-    echo "W: $CERTSDIR/$crt not found, but listed in $CERTSCONF." >&2
 +    add "$CERTSDIR/$crt"
 +  elif test -f "$LOCALCERTSDIR/$crt"
 +  then
 +    add "$LOCALCERTSDIR/$crt"
 +  else
--    echo "W: $CERTSDIR/$crt not found, but listed in $CERTSCONF." >&2
 +    echo "W: $CERTSDIR/$crt or $LOCALCERTSDIR/$crt not found, but listed in $CERTSCONF." >&2
      continue
    fi
@@ -74,6 +74,6 @@
 -  done
 -fi
 -
- chmod 0644 "$TEMPBUNDLE"
- mv -f "$TEMPBUNDLE" "$CERTBUNDLE"
+ rm -f "$CERTBUNDLE"
  
+ ADDED_CNT=$(wc -l < "$ADDED")

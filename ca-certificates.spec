@@ -8,7 +8,7 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20120623
-Release:	1
+Release:	2
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
@@ -76,11 +76,7 @@ BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		certsdir	/etc/certs
-%if "%{pld_release}" == "th"
 %define		openssldir	/etc/openssl/certs
-%else
-%define		openssldir	/var/lib/openssl/certs
-%endif
 
 %description
 Common CA Certificates PEM files.
@@ -95,7 +91,7 @@ Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	mktemp
 %if "%{pld_release}" == "ac"
-Requires:	openssl-tools >= 0.9.7m-2
+Requires:	openssl-tools >= 0.9.7m-6.3
 %else
 Requires:	openssl-tools >= 0.9.8i-3
 %endif

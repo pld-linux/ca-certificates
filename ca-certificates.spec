@@ -145,13 +145,6 @@ for a in certum/*.pem; do
 	mv -i "$a" "${a%.pem}.crt"
 done
 
-install -d terena
-openssl x509 -inform DER -in %{SOURCE14} -outform PEM -out terena/$(basename %{SOURCE14})
-openssl x509 -inform DER -in %{SOURCE15} -outform PEM -out terena/$(basename %{SOURCE15})
-openssl x509 -inform DER -in %{SOURCE16} -outform PEM -out terena/$(basename %{SOURCE16})
-openssl x509 -inform DER -in %{SOURCE17} -outform PEM -out terena/$(basename %{SOURCE17})
-openssl x509 -inform DER -in %{SOURCE18} -outform PEM -out terena/$(basename %{SOURCE18})
-
 # http://www.sk.ee/en/Repository/certs/rootcertificates
 # JUUR-SK, ESTEID-SK and ESTEID-SK 2007, ESTEID-SK 2011
 install -d esteid
@@ -164,6 +157,13 @@ for a in esteid/*.PEM.cer; do
 done
 
 %build
+install -d terena
+openssl x509 -inform DER -in %{SOURCE14} -outform PEM -out terena/$(basename %{SOURCE14})
+openssl x509 -inform DER -in %{SOURCE15} -outform PEM -out terena/$(basename %{SOURCE15})
+openssl x509 -inform DER -in %{SOURCE16} -outform PEM -out terena/$(basename %{SOURCE16})
+openssl x509 -inform DER -in %{SOURCE17} -outform PEM -out terena/$(basename %{SOURCE17})
+openssl x509 -inform DER -in %{SOURCE18} -outform PEM -out terena/$(basename %{SOURCE18})
+
 %{__make}
 
 # We have those and more in specific dirs

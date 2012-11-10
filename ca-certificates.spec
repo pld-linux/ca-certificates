@@ -53,9 +53,9 @@ Source19:	http://www.sk.ee/upload/files/JUUR-SK.PEM.cer
 # Source19-md5:	805784c06c9eff3771a4b9bd631cd3f5
 Source20:	http://www.sk.ee/upload/files/ESTEID-SK.PEM.cer
 # Source20-md5:	387beee5b8539ab7d91628f486295899
-Source21:	http://www.sk.ee/upload/files/ESTEID-SK%202007.PEM.cer#/ESTEID-SK_2007.PEM.cer
+Source21:	http://www.sk.ee/upload/files/ESTEID-SK%202007.PEM.cer?/ESTEID-SK_2007.PEM.cer
 # Source21-md5:	2b1a2a77f565d68fdf5f19f6cc3a5600
-Source22:	http://www.sk.ee/upload/files/ESTEID-SK%202011.pem.cer#/ESTEID-SK_2011.pem.cer
+Source22:	http://www.sk.ee/upload/files/ESTEID-SK%202011.pem.cer?/ESTEID-SK_2011.pem.cer
 # Source22-md5:	cfcc1e592cb0ff305158a7e32730546c
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch

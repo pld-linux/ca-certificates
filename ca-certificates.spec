@@ -7,12 +7,12 @@
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
-Version:	20121114
+Version:	20130119
 Release:	1
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
-# Source0-md5:	3000802ea54fbe3a9b6aaa58428241c3
+# Source0-md5:	1fbbec2028a33cf865b79c204aa2e626
 Source1:	https://www.verisign.com/support/thawte-roots.zip
 # Source1-md5:	a3709cc0279ef3fca4f86ea775066b18
 Source2:	http://www.certum.pl/keys/CA.pem

@@ -1,11 +1,11 @@
---- ca-certificates-20120212/Makefile~	2011-12-06 04:03:08.000000000 +0200
-+++ ca-certificates-20120212/Makefile	2012-05-12 11:40:20.330015955 +0300
+--- ca-certificates-20130610/Makefile~	2013-06-10 20:29:57.000000000 +0300
++++ ca-certificates-20130610/Makefile	2013-06-11 11:58:47.673068113 +0300
 @@ -3,7 +3,7 @@
  #
  
  CERTSDIR = /usr/share/ca-certificates
--SUBDIRS = mozilla cacert.org debconf.org spi-inc.org
-+SUBDIRS = mozilla cacert.org debconf.org spi-inc.org thawte certum terena esteid
+-SUBDIRS = mozilla cacert.org spi-inc.org
++SUBDIRS = mozilla cacert.org spi-inc.org thawte certum terena esteid
  
  all:
  	for dir in $(SUBDIRS); do \

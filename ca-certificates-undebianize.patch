@@ -35,8 +35,8 @@
  echo "done."
  
  # vim:set et sw=2:
---- ca-certificates/sbin/update-ca-certificates.8	2008-04-11 20:47:29.000000000 +0200
-+++ ca-certificates-undebianize/sbin/update-ca-certificates.8	2008-11-01 12:18:14.000000000 +0100
+--- ca-certificates-20130610/sbin/update-ca-certificates.8~	2013-06-11 11:32:35.000000000 +0300
++++ ca-certificates-20130610/sbin/update-ca-certificates.8	2013-06-11 11:54:40.662201388 +0300
 @@ -16,7 +16,7 @@
  .\" .sp <n>    insert n+1 empty lines
  .\" for manpage-specific macros, see man(7)
@@ -55,10 +55,10 @@
  a concatenated single-file list of certificates.
  .PP
  It reads the file /etc/ca-certificates.conf. Each line gives a pathname of
-@@ -34,11 +34,6 @@
+@@ -38,11 +38,6 @@
  .PP
- Furthermore all certificates found below /usr/local/share/ca-certificates
- are also included as implicitly trusted.
+ Furthermore all certificates with a .crt extension found below
+ /usr/local/share/ca-certificates are also included as implicitly trusted.
 -.PP
 -Before terminating, \fBupdate-ca-certificates\fP invokes
 -\fBrun-parts\fP on /etc/ca-certificates/update.d and calls each hook with
@@ -67,7 +67,7 @@
  .SH OPTIONS
  A summary of options is included below.
  .TP
-@@ -49,13 +44,13 @@
+@@ -53,13 +48,13 @@
  Be verbose. Output \fBc_rehash\fP.
  .TP
  .B \-f, \-\-fresh
@@ -80,6 +80,6 @@
  .TP
 -.I /etc/ssl/certs/ca-certificates.crt
 +.I /etc/openssl/ca-certificates.crt
- A single-file version of CA certificates.  This hold
+ A single-file version of CA certificates.  This holds
  all CA certificates that you activated in /etc/ca-certificates.conf.
  .TP

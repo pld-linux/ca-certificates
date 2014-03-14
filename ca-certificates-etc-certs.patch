@@ -1,5 +1,5 @@
---- ca-certificates-20120212/sbin/update-ca-certificates~	2012-05-12 11:41:03.000000000 +0300
-+++ ca-certificates-20120212/sbin/update-ca-certificates	2012-05-12 11:43:10.517657520 +0300
+--- ca-certificates-20140223/sbin/update-ca-certificates~	2014-03-14 12:55:24.000000000 +0200
++++ ca-certificates-20140223/sbin/update-ca-certificates	2014-03-14 14:38:31.587876211 +0200
 @@ -37,7 +37,7 @@
  
  CERTSCONF=/etc/ca-certificates.conf
@@ -45,17 +45,17 @@
       esac
    done
    find . -type l -print | while read symlink
-@@ -110,24 +110,18 @@
+@@ -111,24 +111,18 @@
  
  sed -e '/^$/d' -e '/^#/d' -e '/^!/d' $CERTSCONF | while read crt
  do
 -  if ! test -f "$CERTSDIR/$crt"
 +  if test -f "$CERTSDIR/$crt"
-   then
--    echo "W: $CERTSDIR/$crt not found, but listed in $CERTSCONF." >&2
++   then
 +    add "$CERTSDIR/$crt"
 +  elif test -f "$LOCALCERTSDIR/$crt"
-+  then
+   then
+-    echo "W: $CERTSDIR/$crt not found, but listed in $CERTSCONF." >&2
 +    add "$LOCALCERTSDIR/$crt"
 +  else
 +    echo "W: $CERTSDIR/$crt or $LOCALCERTSDIR/$crt not found, but listed in $CERTSCONF." >&2
@@ -68,7 +68,7 @@
 -# administrator.
 -if [ -d "$LOCALCERTSDIR" ]
 -then
--  find -L "$LOCALCERTSDIR" -type f -name '*.crt' | while read crt
+-  find -L "$LOCALCERTSDIR" -type f -name '*.crt' | sort | while read crt
 -  do
 -    add "$crt"
 -  done

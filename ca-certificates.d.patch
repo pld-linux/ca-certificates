@@ -1,5 +1,5 @@
---- ca-certificates-20120212/sbin/update-ca-certificates~	2012-05-12 16:08:15.813747796 +0300
-+++ ca-certificates-20120212/sbin/update-ca-certificates	2012-05-12 16:09:57.727422190 +0300
+--- ca-certificates-20140223/sbin/update-ca-certificates	2014-03-14 14:42:21.171246343 +0200
++++ ca-certificates-20140223/sbin/update-ca-certificates	2014-03-14 14:46:50.556014888 +0200
 @@ -41,6 +41,7 @@
  done
  
@@ -32,7 +32,7 @@
 -sed -e '/^$/d' -e '/^#/d' -e '/^!/d' $CERTSCONF | while read crt
 -do
 -  if test -f "$CERTSDIR/$crt"
--  then
+-   then
 -    add "$CERTSDIR/$crt"
 -  elif test -f "$LOCALCERTSDIR/$crt"
 -  then

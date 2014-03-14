@@ -7,12 +7,12 @@
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
-Version:	20130906
-Release:	2
+Version:	20140223
+Release:	1
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Libraries
-Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.gz
-# Source0-md5:	67d42b6be21c616a8b7d3d85d95ae912
+Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
+# Source0-md5:	ff4049c32342ea450cda82bb14026ffd
 Source1:	https://www.verisign.com/support/thawte-roots.zip
 # Source1-md5:	21a284ebdc6e8f4178d5cc10fb9e1ef2
 Source2:	http://www.certum.pl/keys/CA.pem
@@ -61,7 +61,6 @@ Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
 Patch3:		%{name}-c_rehash.sh.patch
-Patch4:		%{name}-endline.patch
 Patch5:		%{name}-DESTDIR.patch
 Patch6:		%{name}.d.patch
 URL:		http://www.cacert.org/
@@ -70,7 +69,9 @@ BuildRequires:	python
 BuildRequires:	python-modules
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	sed >= 4.0
+BuildRequires:	tar >= 1:1.22
 BuildRequires:	unzip
+BuildRequires:	xz
 Obsoletes:	certificates
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -109,7 +110,6 @@ mv ca-certificates/* .
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
-%patch4 -p1
 %patch5 -p1
 %patch6 -p1
 

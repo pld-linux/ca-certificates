@@ -37,12 +37,12 @@
    if test -L "$PEM"
    then
      rm -f "$PEM"
-@@ -89,6 +89,7 @@
+@@ -90,6 +90,7 @@ if [ "$fresh" = 1 ]; then
    do
-      case $(readlink $symlink) in
-      $CERTSDIR*) rm -f $symlink;;
-+     $LOCALCERTSDIR*) rm -f $symlink;;
-      esac
+     case $(readlink $symlink) in
+       $CERTSDIR*) rm -f $symlink;;
++      $LOCALCERTSDIR*) rm -f $symlink;;
+     esac
    done
    find . -type l -print | while read symlink
 @@ -111,24 +111,18 @@

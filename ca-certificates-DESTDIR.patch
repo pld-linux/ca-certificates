@@ -8,15 +8,15 @@
  while [ $# -gt 0 ];
  do
    case $1 in
-@@ -30,6 +31,8 @@
-   	verbose=1;;
-   --fresh|-f)
- 	fresh=1;;
-+  --destdir)
-+	DESTDIR=$2; shift;;
-   --help|-h|*)
- 	echo "$0: [--verbose] [--fresh]"
- 	exit;;
+@@ -31,6 +31,8 @@ do
+       verbose=1;;
+     --fresh|-f)
+       fresh=1;;
++    --destdir)
++      DESTDIR=$2; shift;;
+     --help|-h|*)
+       echo "$0: [--verbose] [--fresh]"
+       exit;;
 @@ -37,11 +40,11 @@
    shift
  done

@@ -8,7 +8,7 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20141019
-Release:	1
+Release:	2
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
@@ -39,24 +39,39 @@ Source12:	http://www.certum.pl/keys/class3.pem
 # Source12-md5:	07bc97e21da092ba53535c7379e1b58b
 Source13:	http://www.certum.pl/keys/class4.pem
 # Source13-md5:	99ef61d509539af89f1c025b67245965
-Source14:	http://crt.tcs.terena.org/TERENASSLCA.crt
-# Source14-md5:	f62cd1546a8ef14e31ba1ce8eecd234a
-Source15:	http://crt.tcs.terena.org/TERENAeScienceSSLCA.crt
-# Source15-md5:	5feea35ab01a373f115219706f1f57bd
-Source16:	http://crt.tcs.terena.org/TERENAPersonalCA.crt
-# Source16-md5:	53eaa497c8fb0b79f14fe9f69693689a
-Source17:	http://crt.tcs.terena.org/TERENAeSciencePersonalCA.crt
-# Source17-md5:	e25cc655d3ebe920ca9c187e3dde9191
-Source18:	http://crt.tcs.terena.org/TERENACodeSigningCA.crt
-# Source18-md5:	74c9f511ab03a4e6b7462e310abfa89b
-Source19:	http://www.sk.ee/upload/files/JUUR-SK.PEM.cer
-# Source19-md5:	805784c06c9eff3771a4b9bd631cd3f5
-Source20:	http://www.sk.ee/upload/files/ESTEID-SK.PEM.cer
-# Source20-md5:	387beee5b8539ab7d91628f486295899
-Source21:	http://www.sk.ee/upload/files/ESTEID-SK%202007.PEM.cer?/ESTEID-SK_2007.PEM.cer
-# Source21-md5:	2b1a2a77f565d68fdf5f19f6cc3a5600
-Source22:	http://www.sk.ee/upload/files/ESTEID-SK%202011.pem.cer?/ESTEID-SK_2011.pem.cer
-# Source22-md5:	cfcc1e592cb0ff305158a7e32730546c
+Source14:	http://www.certum.pl/CTNCA.pem
+# Source14-md5:	231b5b8bf05c5e93a9b2ebc4186eb6f7
+Source15:	http://repository.certum.pl/class1casha2.pem
+# Source15-md5:	b52dde6e2618a21965afbe6d6676d09f
+Source16:	http://repository.certum.pl/dvcasha2.pem
+# Source16-md5:	88ce64a84375c95ab6f7c8515dd2a117
+Source17:	http://repository.certum.pl/ovcasha2.pem
+# Source17-md5:	3149c923bd23469d6b14caa6334f8b63
+Source18:	http://repository.certum.pl/evcasha2.pem
+# Source18-md5:	ac54dc6cf3af7e243879b1c8b4aca8a3
+#Source19:	http://repository.certum.pl/dvcasha2.pem
+## Source19-md5:	88ce64a84375c95ab6f7c8515dd2a117
+Source20:	http://repository.certum.pl/gscasha2.pem
+# Source20-md5:	a29d37f95dafc08cef36015922e3b0d3
+Source21:	http://crt.tcs.terena.org/TERENASSLCA.crt
+# Source21-md5:	f62cd1546a8ef14e31ba1ce8eecd234a
+Source22:	http://crt.tcs.terena.org/TERENAeScienceSSLCA.crt
+# Source22-md5:	5feea35ab01a373f115219706f1f57bd
+Source23:	http://crt.tcs.terena.org/TERENAPersonalCA.crt
+# Source23-md5:	53eaa497c8fb0b79f14fe9f69693689a
+Source24:	http://crt.tcs.terena.org/TERENAeSciencePersonalCA.crt
+# Source24-md5:	e25cc655d3ebe920ca9c187e3dde9191
+Source25:	http://crt.tcs.terena.org/TERENACodeSigningCA.crt
+# Source25-md5:	74c9f511ab03a4e6b7462e310abfa89b
+Source26:	http://www.sk.ee/upload/files/JUUR-SK.PEM.cer
+# Source26-md5:	805784c06c9eff3771a4b9bd631cd3f5
+Source27:	http://www.sk.ee/upload/files/ESTEID-SK.PEM.cer
+# Source27-md5:	387beee5b8539ab7d91628f486295899
+Source28:	http://www.sk.ee/upload/files/ESTEID-SK%202007.PEM.cer?/ESTEID-SK_2007.PEM.cer
+# Source28-md5:	2b1a2a77f565d68fdf5f19f6cc3a5600
+Source29:	http://www.sk.ee/upload/files/ESTEID-SK%202011.pem.cer?/ESTEID-SK_2011.pem.cer
+# Source29-md5:	cfcc1e592cb0ff305158a7e32730546c
+
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
@@ -141,6 +156,13 @@ cp -pi %{SOURCE10} certum
 cp -pi %{SOURCE11} certum
 cp -pi %{SOURCE12} certum
 cp -pi %{SOURCE13} certum
+cp -pi %{SOURCE14} certum
+cp -pi %{SOURCE15} certum
+cp -pi %{SOURCE16} certum
+cp -pi %{SOURCE17} certum
+cp -pi %{SOURCE18} certum
+#cp -pi %{SOURCE19} certum
+cp -pi %{SOURCE20} certum
 for a in certum/*.pem; do
 	mv -i "$a" "${a%.pem}.crt"
 done
@@ -148,21 +170,21 @@ done
 # http://www.sk.ee/en/Repository/certs/rootcertificates
 # JUUR-SK, ESTEID-SK and ESTEID-SK 2007, ESTEID-SK 2011
 install -d esteid
-cp -pi %{SOURCE19} esteid
-cp -pi %{SOURCE20} esteid
-cp -pi %{SOURCE21} esteid/ESTEID-SK_2007.crt
-cp -pi %{SOURCE22} esteid/ESTEID-SK_2011.crt
+cp -pi %{SOURCE26} esteid
+cp -pi %{SOURCE27} esteid
+cp -pi %{SOURCE28} esteid/ESTEID-SK_2007.crt
+cp -pi %{SOURCE29} esteid/ESTEID-SK_2011.crt
 for a in esteid/*.PEM.cer; do
 	mv -i "$a" "${a%.PEM.cer}.crt"
 done
 
 %build
 install -d terena
-openssl x509 -inform DER -in %{SOURCE14} -outform PEM -out terena/$(basename %{SOURCE14})
-openssl x509 -inform DER -in %{SOURCE15} -outform PEM -out terena/$(basename %{SOURCE15})
-openssl x509 -inform DER -in %{SOURCE16} -outform PEM -out terena/$(basename %{SOURCE16})
-openssl x509 -inform DER -in %{SOURCE17} -outform PEM -out terena/$(basename %{SOURCE17})
-openssl x509 -inform DER -in %{SOURCE18} -outform PEM -out terena/$(basename %{SOURCE18})
+openssl x509 -inform DER -in %{SOURCE21} -outform PEM -out terena/$(basename %{SOURCE21})
+openssl x509 -inform DER -in %{SOURCE22} -outform PEM -out terena/$(basename %{SOURCE22})
+openssl x509 -inform DER -in %{SOURCE23} -outform PEM -out terena/$(basename %{SOURCE23})
+openssl x509 -inform DER -in %{SOURCE24} -outform PEM -out terena/$(basename %{SOURCE24})
+openssl x509 -inform DER -in %{SOURCE25} -outform PEM -out terena/$(basename %{SOURCE25})
 
 %{__make}
 

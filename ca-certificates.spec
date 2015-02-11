@@ -3,12 +3,13 @@
 # - https://bugzilla.mozilla.org/show_bug.cgi?id=549701 and
 #   http://groups.google.com/group/mozilla.dev.security.policy/browse_thread/thread/b6493a285ba79998#
 # - add certs noted in TODO file
+# - swap %{certsdir}/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt regards file vs symlink
 #
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20141019
-Release:	2
+Release:	3
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
@@ -196,7 +197,7 @@ rm mozilla/{Thawte,thawte,Certum,IGC_A,Deutsche_Telekom_Root_CA_2,Juur-SK}*.crt
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_sbindir},%{certsdir},/etc/pki/tls,%{_sysconfdir}/ca-certificates.d}
+install -d $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_sbindir},%{certsdir},/etc/pki/tls/certs,%{_sysconfdir}/ca-certificates.d}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
@@ -212,6 +213,8 @@ install -d $RPM_BUILD_ROOT%{openssldir}
 ./sbin/update-ca-certificates --destdir $RPM_BUILD_ROOT
 rm -rf $RPM_BUILD_ROOT%{openssldir}
 
+ln -s %{certsdir}/ca-certificates.crt $RPM_BUILD_ROOT/etc/pki/tls/certs/ca-bundle.crt
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -222,6 +225,8 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc debian/README.Debian debian/changelog
 %dir /etc/pki/tls
+%dir /etc/pki/tls/certs
+%config(noreplace) %verify(not md5 mtime size) /etc/pki/tls/certs/ca-bundle.crt
 %config(noreplace) %verify(not md5 mtime size) %{certsdir}/ca-certificates.crt
 
 %files update

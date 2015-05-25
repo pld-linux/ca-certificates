@@ -2,7 +2,8 @@
 # - cleanup dead links from /etc/openssl/certs after -update uninstall
 # - https://bugzilla.mozilla.org/show_bug.cgi?id=549701 and
 #   http://groups.google.com/group/mozilla.dev.security.policy/browse_thread/thread/b6493a285ba79998#
-# - add certs noted in TODO file
+# - make amsn use system certs
+# - make pidgin use system certs
 # - swap %{certsdir}/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt regards file vs symlink
 #
 Summary:	Common CA Certificates PEM files

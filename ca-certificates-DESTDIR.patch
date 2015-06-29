@@ -1,36 +1,33 @@
---- ca-certificates-20090814/sbin/update-ca-certificates~	2010-05-05 14:10:46.000000000 +0300
-+++ ca-certificates-20090814/sbin/update-ca-certificates	2010-05-05 14:10:52.783355044 +0300
-@@ -23,6 +23,7 @@
- 
+--- a/sbin/update-ca-certificates~	2015-06-29 14:06:06.000000000 +0200
++++ b/sbin/update-ca-certificates	2015-06-29 14:09:30.591543265 +0200
+@@ -24,6 +24,7 @@
  verbose=0
  fresh=0
+ default=0
 +DESTDIR=
- while [ $# -gt 0 ];
- do
-   case $1 in
-@@ -31,6 +31,8 @@ do
-       verbose=1;;
-     --fresh|-f)
+ CERTSCONF=/etc/ca-certificates.conf
+ CERTSDIR=/usr/share/ca-certificates
+ LOCALCERTSDIR=/etc/certs
+@@ -41,6 +42,8 @@ do
+     --default|-d)
+       default=1
        fresh=1;;
 +    --destdir)
 +      DESTDIR=$2; shift;;
-     --help|-h|*)
-       echo "$0: [--verbose] [--fresh]"
-       exit;;
-@@ -37,11 +40,11 @@
+     --certsconf)
+       shift
+       CERTSCONF="$1";;
+@@ -66,6 +69,13 @@ do
    shift
  done
  
--CERTSCONF=/etc/ca-certificates.conf
--CERTSDIR=/usr/share/ca-certificates
--LOCALCERTSDIR=/etc/certs
--CERTBUNDLE=/etc/certs/ca-certificates.crt
--ETCCERTSDIR=@openssldir@
-+CERTSCONF=$DESTDIR/etc/ca-certificates.conf
-+CERTSDIR=$DESTDIR/usr/share/ca-certificates
-+LOCALCERTSDIR=$DESTDIR/etc/certs
-+CERTBUNDLE=$DESTDIR/etc/certs/ca-certificates.crt
-+ETCCERTSDIR=$DESTDIR@openssldir@
- 
- cleanup() {
-   rm -f "$TEMPBUNDLE"
++CERTSCONF=${DESTDIR}${CERTSCONF}
++CERTSDIR=${DESTDIR}${CERTSDIR}
++LOCALCERTSDIR=${DESTDIR}${LOCALCERTSDIR}
++CERTBUNDLE=${DESTDIR}${CERTBUNDLE}
++ETCCERTSDIR=${DESTDIR}${ETCCERTSDIR}
++HOOKSDIR=${DESTDIR}${HOOKSDIR}
++
+ if [ ! -s "$CERTSCONF" ]
+ then
+   fresh=1

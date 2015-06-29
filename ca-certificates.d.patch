@@ -1,20 +1,28 @@
 --- ca-certificates-20140223/sbin/update-ca-certificates	2014-03-14 14:42:21.171246343 +0200
 +++ ca-certificates-20140223/sbin/update-ca-certificates	2014-03-14 14:46:50.556014888 +0200
-@@ -41,6 +41,7 @@
+@@ -26,6 +26,7 @@ fresh=0
+ default=0
+ DESTDIR=
+ CERTSCONF=/etc/ca-certificates.conf
++CERTSCONFD=/etc/ca-certificates.d
+ CERTSDIR=/usr/share/ca-certificates
+ LOCALCERTSDIR=/etc/certs
+ CERTBUNDLE=/etc/certs/ca-certificates.crt
+@@ -70,6 +71,7 @@ do
  done
  
- CERTSCONF=$DESTDIR/etc/ca-certificates.conf
-+CERTSCONFD=$DESTDIR/etc/ca-certificates.d
- CERTSDIR=$DESTDIR/usr/share/ca-certificates
- LOCALCERTSDIR=$DESTDIR/etc/certs
- CERTBUNDLE=$DESTDIR/etc/certs/ca-certificates.crt
+ CERTSCONF=${DESTDIR}${CERTSCONF}
++CERTSCONFD=${DESTDIR}${CERTSCONFD}
+ CERTSDIR=${DESTDIR}${CERTSDIR}
+ LOCALCERTSDIR=${DESTDIR}${LOCALCERTSDIR}
+ CERTBUNDLE=${DESTDIR}${CERTBUNDLE}
 @@ -105,25 +106,30 @@
  
  echo -n "Updating certificates in $ETCCERTSDIR... "
  
 -# Handle certificates that should be removed.  This is an explicit act
 -# by prefixing lines in the configuration files with exclamation marks (!).
--sed -n -e '/^$/d' -e 's/^!//p' $CERTSCONF | while read crt
+-sed -n -e '/^$/d' -e 's/^!//p' "$CERTSCONF" | while read crt
 -do
 -  remove "$CERTSDIR/$crt"
 -done
@@ -29,7 +37,7 @@
 +    remove "$CERTSDIR/$crt"
 +  done
  
--sed -e '/^$/d' -e '/^#/d' -e '/^!/d' $CERTSCONF | while read crt
+-sed -e '/^$/d' -e '/^#/d' -e '/^!/d' "$CERTSCONF" | while read crt
 -do
 -  if test -f "$CERTSDIR/$crt"
 -   then

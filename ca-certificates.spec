@@ -10,7 +10,7 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20150426
-Release:	1
+Release:	2
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
@@ -73,7 +73,20 @@ Source28:	http://www.sk.ee/upload/files/ESTEID-SK%202007.PEM.cer?/ESTEID-SK_2007
 # Source28-md5:	2b1a2a77f565d68fdf5f19f6cc3a5600
 Source29:	http://www.sk.ee/upload/files/ESTEID-SK%202011.pem.cer?/ESTEID-SK_2011.pem.cer
 # Source29-md5:	cfcc1e592cb0ff305158a7e32730546c
-
+Source30:	http://www.terena.org/activities/tcs/repository/sha2/TERENA_SSL_CA_2.pem
+# Source30-md5:	96700974350cecfcfbd904d52c3a3942
+Source31:	http://www.terena.org/activities/tcs/repository/sha2/TERENA_Personal_CA_2.pem
+# Source31-md5:	d40e5c821f8559faf5bcd55eac5e1371
+Source32:	http://www.terena.org/activities/tcs/repository/sha2/TERENA_Code_Signing_CA_2.pem
+# Source32-md5:	69ff653e730adf87ff59bf373950b357
+Source33:	http://www.terena.org/activities/tcs/repository-g3/TERENA_SSL_CA_3.pem
+# Source33-md5:	b22ed904900ed6b3bc129f9a35ba5a66
+Source34:	http://www.terena.org/activities/tcs/repository-g3/TERENA_Personal_CA_3.pem
+# Source34-md5:	eb5ddefe94750c2f8d4f11cb1f3af911
+Source35:	http://www.terena.org/activities/tcs/repository-g3/TERENA_Code_Signing_CA_3.pem
+# Source35-md5:	43375a208fba0a5e73f1912faa4db86d
+Source36:	http://www.terena.org/activities/tcs/repository-g3/TERENA_SSL_High_Assurance_CA_3.pem
+# Source36-md5:	6e00d9ede4460e739eb285ea023299f0
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
@@ -187,6 +200,13 @@ openssl x509 -inform DER -in %{SOURCE22} -outform PEM -out terena/$(basename %{S
 openssl x509 -inform DER -in %{SOURCE23} -outform PEM -out terena/$(basename %{SOURCE23})
 openssl x509 -inform DER -in %{SOURCE24} -outform PEM -out terena/$(basename %{SOURCE24})
 openssl x509 -inform DER -in %{SOURCE25} -outform PEM -out terena/$(basename %{SOURCE25})
+cp %{SOURCE30} terena/$(basename %{SOURCE30} .pem).crt
+cp %{SOURCE31} terena/$(basename %{SOURCE31} .pem).crt
+cp %{SOURCE32} terena/$(basename %{SOURCE32} .pem).crt
+sed 's/\r//' %{SOURCE33} > terena/$(basename %{SOURCE33} .pem).crt
+sed 's/\r//' %{SOURCE34} > terena/$(basename %{SOURCE34} .pem).crt
+sed 's/\r//' %{SOURCE35} > terena/$(basename %{SOURCE35} .pem).crt
+sed 's/\r//' %{SOURCE36} > terena/$(basename %{SOURCE36} .pem).crt
 
 %{__make}
 

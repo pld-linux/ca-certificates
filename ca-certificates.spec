@@ -93,7 +93,7 @@ Patch2:		%{name}-etc-certs.patch
 Patch3:		%{name}-c_rehash.sh.patch
 Patch5:		%{name}-DESTDIR.patch
 Patch6:		%{name}.d.patch
-URL:		http://www.cacert.org/
+URL:		https://packages.debian.org/sid/ca-certificates
 BuildRequires:	openssl-tools
 BuildRequires:	python
 BuildRequires:	python-modules

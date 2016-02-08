@@ -6,7 +6,9 @@
 # - make pidgin use system certs
 # - swap %{certsdir}/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt regards file vs symlink
 #
-%bcond_without	tests
+# Conditional build:
+%bcond_without	tests	# skip duplicates check
+#
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
@@ -213,13 +215,13 @@ sed 's/\r//' %{SOURCE36} > terena/$(basename %{SOURCE36} .pem).crt
 %{__make}
 
 # We have those and more in specific dirs
-rm mozilla/{thawte,Certum,IGC_A,Deutsche_Telekom_Root_CA_2,Juur-SK}*.crt
+%{__rm} mozilla/{thawte,Certum,IGC_A,Deutsche_Telekom_Root_CA_2,Juur-SK}*.crt
 
 # Duplicate with Verisign_Class_3_Public_Primary_Certification_Authority_2.crt
-rm thawte/Class_3_Public_Primary_Certification_Authority.crt
+%{__rm} thawte/Class_3_Public_Primary_Certification_Authority.crt
 
 # See TODO
-# rm mozilla/RSA_Security_1024_v3.crt
+# %{__rm} mozilla/RSA_Security_1024_v3.crt
 
 %install
 rm -rf $RPM_BUILD_ROOT

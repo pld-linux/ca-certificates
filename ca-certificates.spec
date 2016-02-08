@@ -6,11 +6,12 @@
 # - make pidgin use system certs
 # - swap %{certsdir}/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt regards file vs symlink
 #
+%bcond_without	tests
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20160104
-Release:	1
+Release:	2
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Libraries
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
@@ -214,6 +215,9 @@ sed 's/\r//' %{SOURCE36} > terena/$(basename %{SOURCE36} .pem).crt
 # We have those and more in specific dirs
 rm mozilla/{thawte,Certum,IGC_A,Deutsche_Telekom_Root_CA_2,Juur-SK}*.crt
 
+# Duplicate with Verisign_Class_3_Public_Primary_Certification_Authority_2.crt
+rm thawte/Class_3_Public_Primary_Certification_Authority.crt
+
 # See TODO
 # rm mozilla/RSA_Security_1024_v3.crt
 
@@ -236,6 +240,23 @@ install -d $RPM_BUILD_ROOT%{openssldir}
 rm -rf $RPM_BUILD_ROOT%{openssldir}
 
 ln -s %{certsdir}/ca-certificates.crt $RPM_BUILD_ROOT/etc/pki/tls/certs/ca-bundle.crt
+
+%if %{with tests}
+install -d pld-tests
+cd pld-tests
+
+# check for duplicates (to avoid X509_STORE_add_cert "cert already in hash table" problem)
+cat $RPM_BUILD_ROOT/%{certsdir}/ca-certificates.crt | awk '/BEGIN/ { i++; } /BEGIN/, /END/ { print > i ".extracted.crt" }'
+for cert in *.extracted.crt; do
+	openssl x509 -in "$cert" -noout -sha1 -fingerprint > "$cert.fingerprint"
+done
+DUPLICATES=$(sort *.fingerprint | uniq -c | sort -nr | awk ' { if ($1 != 1) { print $0; } } ')
+if [ -n "$DUPLICATES" ]; then
+	echo -e "\n\nFound duplicates for certificates (count, type, fingerprint):\n\n$DUPLICATES\n\nFailing..."
+	exit 1
+fi
+cd ..
+%endif
 
 %clean
 rm -rf $RPM_BUILD_ROOT

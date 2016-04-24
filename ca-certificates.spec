@@ -98,7 +98,7 @@ Patch5:		%{name}-DESTDIR.patch
 Patch6:		%{name}.d.patch
 URL:		https://packages.debian.org/sid/ca-certificates
 BuildRequires:	openssl-tools
-BuildRequires:	python
+BuildRequires:	python >= 1:2.6
 BuildRequires:	python-modules
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	sed >= 4.0

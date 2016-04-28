@@ -8,14 +8,14 @@
 #
 # Conditional build:
 %bcond_without	tests	# skip duplicates check
-#
+
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20160104
 Release:	2
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
-Group:		Libraries
+Group:		Base
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
 # Source0-md5:	d9665a83d0d3ef8176a38e6aa20458e9
 Source1:	https://www.verisign.com/support/thawte-roots.zip

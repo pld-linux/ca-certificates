@@ -13,7 +13,7 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20160104
-Release:	2
+Release:	3
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
@@ -90,6 +90,12 @@ Source35:	http://www.terena.org/activities/tcs/repository-g3/TERENA_Code_Signing
 # Source35-md5:	43375a208fba0a5e73f1912faa4db86d
 Source36:	http://www.terena.org/activities/tcs/repository-g3/TERENA_SSL_High_Assurance_CA_3.pem
 # Source36-md5:	6e00d9ede4460e739eb285ea023299f0
+Source37:	https://letsencrypt.org/certs/isrgrootx1.pem.txt
+# Source37-md5:	c73c30ef692eb5be150caad88210e891
+Source38:	https://letsencrypt.org/certs/letsencryptauthorityx1.pem.txt
+# Source38-md5:	7a4c9a537127f609035ad7f4019defdb
+Source39:	https://letsencrypt.org/certs/letsencryptauthorityx2.pem.txt
+# Source39-md5:	27b0b8f7ef14356d8f717bc083c43ef1
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
@@ -196,6 +202,11 @@ cp -pi %{SOURCE29} esteid/ESTEID-SK_2011.crt
 for a in esteid/*.PEM.cer; do
 	mv -i "$a" "${a%.PEM.cer}.crt"
 done
+
+install -d mozilla
+cp -pi %{SOURCE37} mozilla/$(basename %{SOURCE37} .pem.txt).crt
+cp -pi %{SOURCE38} mozilla/$(basename %{SOURCE38} .pem.txt).crt
+cp -pi %{SOURCE39} mozilla/$(basename %{SOURCE39} .pem.txt).crt
 
 %build
 install -d terena

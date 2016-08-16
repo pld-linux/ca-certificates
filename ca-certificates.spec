@@ -203,6 +203,8 @@ for a in esteid/*.PEM.cer; do
 	mv -i "$a" "${a%.PEM.cer}.crt"
 done
 
+# 2eecd52 - add letsencrypt certificates (approved by mozilla) <Arkadiusz Miśkiewicz>
+# https://bugzilla.mozilla.org/show_bug.cgi?id=1204656
 install -d mozilla
 cp -pi %{SOURCE37} mozilla/$(basename %{SOURCE37} .pem.txt).crt
 cp -pi %{SOURCE38} mozilla/$(basename %{SOURCE38} .pem.txt).crt

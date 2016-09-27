@@ -13,13 +13,12 @@ Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 Version:	20160104
-Release:	3
+Release:	4
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
 # Source0-md5:	d9665a83d0d3ef8176a38e6aa20458e9
-Source1:	https://www.verisign.com/support/thawte-roots.zip
-# Source1-md5:	21a284ebdc6e8f4178d5cc10fb9e1ef2
+
 Source2:	http://www.certum.pl/keys/CA.pem
 # Source2-md5:	35610177afc9c64e70f1ce62c1885496
 Source3:	http://www.certum.pl/keys/level1.pem
@@ -154,20 +153,6 @@ mv %{name}/* .
 
 %{__sed} -i -e 's,@openssldir@,%{openssldir},' sbin/update-ca-certificates*
 
-%{__unzip} -qq %{SOURCE1} -d thawte
-
-find thawte/ -name *.pem -o -name *.txt| while read f ; do
-	if (file "$f" | grep -q "PEM"); then
-		ff=$(echo $f | sed -e 's|[ ,]|_|g' -e 's|[()]|=|g')
-		nname=$(basename "$ff" .pem)
-		nname=$(basename "$nname" .txt)
-		nname=$(basename "$nname" _b64)
-		cp -pi "$f" "thawte/${nname}.crt"
-	else
-		echo "Skipping $f, doesn't look like PEM CERT"
-	fi
-done
-
 install -d certum
 cp -pi %{SOURCE2} certum
 cp -pi %{SOURCE3} certum
@@ -228,10 +213,7 @@ sed 's/\r//' %{SOURCE36} > terena/$(basename %{SOURCE36} .pem).crt
 %{__make}
 
 # We have those and more in specific dirs
-%{__rm} mozilla/{thawte,Certum,IGC_A,Deutsche_Telekom_Root_CA_2,Juur-SK}*.crt
-
-# Duplicate with Verisign_Class_3_Public_Primary_Certification_Authority_2.crt
-%{__rm} thawte/Class_3_Public_Primary_Certification_Authority.crt
+%{__rm} mozilla/{Certum,IGC_A,Deutsche_Telekom_Root_CA_2,Juur-SK}*.crt
 
 # See TODO
 # %{__rm} mozilla/RSA_Security_1024_v3.crt

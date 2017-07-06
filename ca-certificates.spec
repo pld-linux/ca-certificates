@@ -12,7 +12,8 @@
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
-Version:	20161130+nmu1
+%define	ver_date	20161130
+Version:	%{ver_date}+nmu1
 Release:	1
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
@@ -88,8 +89,6 @@ Source35:	http://www.terena.org/activities/tcs/repository-g3/TERENA_Code_Signing
 # Source35-md5:	43375a208fba0a5e73f1912faa4db86d
 Source36:	http://www.terena.org/activities/tcs/repository-g3/TERENA_SSL_High_Assurance_CA_3.pem
 # Source36-md5:	6e00d9ede4460e739eb285ea023299f0
-Source37:	https://letsencrypt.org/certs/isrgrootx1.pem.txt
-# Source37-md5:	c73c30ef692eb5be150caad88210e891
 Source38:	https://letsencrypt.org/certs/letsencryptauthorityx1.pem.txt
 # Source38-md5:	7a4c9a537127f609035ad7f4019defdb
 Source39:	https://letsencrypt.org/certs/letsencryptauthorityx2.pem.txt
@@ -141,8 +140,7 @@ Script and data for updating CA Certificates database.
 Skrypt i dane do odświeżania bazy certyfikatów CA.
 
 %prep
-%setup -qc
-mv %{name}*/* .
+%setup -q -n %{name}-%{ver_date}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -188,9 +186,7 @@ for a in esteid/*.PEM.cer; do
 done
 
 # 2eecd52 - add letsencrypt certificates (approved by mozilla) <Arkadiusz Miśkiewicz>
-# https://bugzilla.mozilla.org/show_bug.cgi?id=1204656
 install -d mozilla
-cp -pi %{SOURCE37} mozilla/$(basename %{SOURCE37} .pem.txt).crt
 cp -pi %{SOURCE38} mozilla/$(basename %{SOURCE38} .pem.txt).crt
 cp -pi %{SOURCE39} mozilla/$(basename %{SOURCE39} .pem.txt).crt
 
@@ -242,7 +238,7 @@ install -d pld-tests
 cd pld-tests
 
 # check for duplicates (to avoid X509_STORE_add_cert "cert already in hash table" problem)
-cat $RPM_BUILD_ROOT/%{certsdir}/ca-certificates.crt | awk '/BEGIN/ { i++; } /BEGIN/, /END/ { print > i ".extracted.crt" }'
+cat $RPM_BUILD_ROOT%{certsdir}/ca-certificates.crt | awk '/BEGIN/ { i++; } /BEGIN/, /END/ { print > i ".extracted.crt" }'
 for cert in *.extracted.crt; do
 	openssl x509 -in "$cert" -noout -sha1 -fingerprint > "$cert.fingerprint"
 done

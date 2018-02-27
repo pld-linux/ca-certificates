@@ -12,13 +12,13 @@
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
-%define	ver_date	20161130
-Version:	%{ver_date}+nmu1
-Release:	2
+%define	ver_date	20170717
+Version:	%{ver_date}
+Release:	1
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
-Source0:	ftp://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
-# Source0-md5:	a09e8b63126188fd0ed77f6fbaf5d35f
+Source0:	http://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
+# Source0-md5:	55a6bb6b98afb16b3cde8e3ad1e262eb
 Source2:	http://www.certum.pl/keys/CA.pem
 # Source2-md5:	35610177afc9c64e70f1ce62c1885496
 Source3:	http://www.certum.pl/keys/level1.pem
@@ -140,7 +140,7 @@ Script and data for updating CA Certificates database.
 Skrypt i dane do odświeżania bazy certyfikatów CA.
 
 %prep
-%setup -q -n %{name}-%{ver_date}
+%setup -q -n %{name}
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -208,7 +208,7 @@ sed 's/\r//' %{SOURCE36} > terena/$(basename %{SOURCE36} .pem).crt
 %{__make}
 
 # We have those and more in specific dirs
-%{__rm} mozilla/{Certum,IGC_A,Deutsche_Telekom_Root_CA_2,Juur-SK}*.crt
+%{__rm} mozilla/{Certum,Deutsche_Telekom_Root_CA_2}*.crt
 
 # See TODO
 # %{__rm} mozilla/RSA_Security_1024_v3.crt

@@ -12,13 +12,13 @@
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
-%define	ver_date	20170717
+%define	ver_date	20180409
 Version:	%{ver_date}
-Release:	2
+Release:	1
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	http://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
-# Source0-md5:	55a6bb6b98afb16b3cde8e3ad1e262eb
+# Source0-md5:	8425f4b1219e4e528db2de764e4c6586
 Source2:	http://www.certum.pl/keys/CA.pem
 # Source2-md5:	35610177afc9c64e70f1ce62c1885496
 Source3:	http://www.certum.pl/keys/level1.pem
@@ -92,7 +92,7 @@ Source36:	http://www.terena.org/activities/tcs/repository-g3/TERENA_SSL_High_Ass
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
-Patch3:		%{name}-c_rehash.sh.patch
+
 Patch5:		%{name}-DESTDIR.patch
 Patch6:		%{name}.d.patch
 URL:		https://packages.debian.org/sid/ca-certificates
@@ -140,7 +140,7 @@ Skrypt i dane do odświeżania bazy certyfikatów CA.
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-%patch3 -p1
+
 %patch5 -p1
 %patch6 -p1
 

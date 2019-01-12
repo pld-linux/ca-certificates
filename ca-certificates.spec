@@ -14,7 +14,7 @@ Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 %define	ver_date	20180409
 Version:	%{ver_date}
-Release:	2
+Release:	3
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	http://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
@@ -243,6 +243,11 @@ fi
 cd ..
 %endif
 
+# The Debian path might be hard-coded in some binaries we cannot fix
+# like the Steam client
+install -d $RPM_BUILD_ROOT/etc/ssl
+ln -s %{certsdir} $RPM_BUILD_ROOT/etc/ssl/certs
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -254,6 +259,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc debian/README.Debian debian/changelog
 %dir /etc/pki/tls
 %dir /etc/pki/tls/certs
+%dir /etc/ssl
+/etc/ssl/certs
 %config(noreplace) %verify(not md5 mtime size) /etc/pki/tls/certs/ca-bundle.crt
 %config(noreplace) %verify(not md5 mtime size) %{certsdir}/ca-certificates.crt
 

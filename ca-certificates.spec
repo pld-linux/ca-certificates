@@ -12,13 +12,13 @@
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
-%define	ver_date	20190110
+%define	ver_date	20200601
 Version:	%{ver_date}
 Release:	1
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	http://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
-# Source0-md5:	e91d3d9259127ba2dbb65fda58d73f31
+# Source0-md5:	9b37bd1bc002d9f041c0a811667cb65a
 Source2:	http://www.certum.pl/keys/CA.pem
 # Source2-md5:	35610177afc9c64e70f1ce62c1885496
 Source3:	http://www.certum.pl/keys/level1.pem
@@ -137,7 +137,8 @@ Script and data for updating CA Certificates database.
 Skrypt i dane do odświeżania bazy certyfikatów CA.
 
 %prep
-%setup -q
+%setup -qc
+cd work
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
@@ -184,6 +185,7 @@ for a in esteid/*.PEM.cer; do
 done
 
 %build
+cd work
 install -d terena
 openssl x509 -inform DER -in %{SOURCE21} -outform PEM -out terena/$(basename %{SOURCE21})
 openssl x509 -inform DER -in %{SOURCE22} -outform PEM -out terena/$(basename %{SOURCE22})
@@ -201,13 +203,14 @@ sed 's/\r//' %{SOURCE36} > terena/$(basename %{SOURCE36} .pem).crt
 %{__make}
 
 # We have those and more in specific dirs
-%{__rm} mozilla/{Certum,Deutsche_Telekom_Root_CA_2}*.crt
+%{__rm} mozilla/Certum*.crt
 
 # See TODO
 # %{__rm} mozilla/RSA_Security_1024_v3.crt
 
 %install
 rm -rf $RPM_BUILD_ROOT
+cd work
 install -d $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_sbindir},%{certsdir},/etc/pki/tls/certs,%{_sysconfdir}/ca-certificates.d}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -231,7 +234,7 @@ install -d pld-tests
 cd pld-tests
 
 # check for duplicates (to avoid X509_STORE_add_cert "cert already in hash table" problem)
-cat $RPM_BUILD_ROOT%{certsdir}/ca-certificates.crt | awk '/BEGIN/ { i++; } /BEGIN/, /END/ { print > i ".extracted.crt" }'
+cat $RPM_BUILD_ROOT%{certsdir}/ca-certificates.crt | awk '/^-+BEGIN/ { i++; } /^-+BEGIN/, /^-+END/ { print > i ".extracted.crt" }'
 for cert in *.extracted.crt; do
 	openssl x509 -in "$cert" -noout -sha1 -fingerprint > "$cert.fingerprint"
 done
@@ -256,7 +259,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc debian/README.Debian debian/changelog
+%doc work/debian/{README.Debian,changelog}
 %dir /etc/pki/tls
 %dir /etc/pki/tls/certs
 %dir /etc/ssl

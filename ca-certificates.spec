@@ -1,5 +1,4 @@
 # TODO
-# - cleanup dead links from /etc/openssl/certs after -update uninstall
 # - https://bugzilla.mozilla.org/show_bug.cgi?id=549701 and
 #   http://groups.google.com/group/mozilla.dev.security.policy/browse_thread/thread/b6493a285ba79998#
 # - make amsn use system certs
@@ -256,6 +255,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %post update
 %{_sbindir}/update-ca-certificates --fresh || :
+
+%postun update
+/usr/bin/find "%{openssldir}" -xtype l -delete || :
 
 %files
 %defattr(644,root,root,755)

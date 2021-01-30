@@ -214,7 +214,7 @@ rm -rf $RPM_BUILD_ROOT
 %dir /etc/ssl/certs
 /etc/ssl/certs/ca-certificates.crt
 %config(noreplace) %verify(not md5 mtime size) /etc/pki/tls/certs/ca-bundle.crt
-%config(noreplace) %verify(not md5 mtime size) %{certsdir}/ca-certificates.crt
+%verify(not md5 mtime size) %{certsdir}/ca-certificates.crt
 
 %files update
 %defattr(644,root,root,755)

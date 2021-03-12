@@ -1,7 +1,7 @@
 --- ca-certificates-20140223/sbin/update-ca-certificates~	2014-03-14 12:55:24.000000000 +0200
 +++ ca-certificates-20140223/sbin/update-ca-certificates	2014-03-14 14:38:31.587876211 +0200
-@@ -37,7 +37,7 @@
- 
+@@ -37,8 +37,8 @@
+ default=0
  CERTSCONF=/etc/ca-certificates.conf
  CERTSDIR=/usr/share/ca-certificates
 -LOCALCERTSDIR=/usr/local/share/ca-certificates
@@ -9,7 +9,8 @@
 +LOCALCERTSDIR=/etc/certs
 +CERTBUNDLE=/etc/certs/ca-certificates.crt
  ETCCERTSDIR=@openssldir@
- cd $ETCCERTSDIR
+ HOOKSDIR=/etc/ca-certificates/update.d
+ 
 @@ -52,7 +52,7 @@
  
  # Helper files.  (Some of them are not simple arrays because we spawn
@@ -39,7 +40,7 @@
      rm -f "$PEM"
 @@ -111,24 +111,18 @@
  
- sed -e '/^$/d' -e '/^#/d' -e '/^!/d' $CERTSCONF | while read crt
+ sed -e '/^$/d' -e '/^#/d' -e '/^!/d' "$CERTSCONF" | while read crt
  do
 -  if ! test -f "$CERTSDIR/$crt"
 +  if test -f "$CERTSDIR/$crt"

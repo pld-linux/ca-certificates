@@ -62,7 +62,7 @@
  A summary of options is included below.
  .TP
 @@ -53,13 +48,13 @@
- Be verbose. Output \fBc_rehash\fP.
+ Be verbose. Output \fBopenssl rehash\fP.
  .TP
  .B \-f, \-\-fresh
 -Fresh updates.  Remove symlinks in /etc/ssl/certs directory.

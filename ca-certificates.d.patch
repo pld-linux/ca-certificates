@@ -17,8 +17,8 @@
  LOCALCERTSDIR=${DESTDIR}${LOCALCERTSDIR}
  CERTBUNDLE=${DESTDIR}${CERTBUNDLE}
 @@ -105,25 +106,30 @@
- 
- echo -n "Updating certificates in $ETCCERTSDIR... "
+   done
+ fi
  
 -# Handle certificates that should be removed.  This is an explicit act
 -# by prefixing lines in the configuration files with exclamation marks (!).

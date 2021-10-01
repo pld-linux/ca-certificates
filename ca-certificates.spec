@@ -13,7 +13,7 @@ Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 %define	ver_date	20210119
 Version:	%{ver_date}
-Release:	5
+Release:	6
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	http://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
@@ -150,6 +150,32 @@ sed 's/\r//' %{SOURCE36} > terena/$(basename %{SOURCE36} .pem).crt
 # We have those and more in specific dirs
 %{__rm} mozilla/Certum*.crt
 
+make_sure_expired_and_rm() {
+	cert="$1"
+	rm -rf pld-tests
+	install -d pld-tests
+	cat "$cert" |  awk '/^-+BEGIN/ { i++; } /^-+BEGIN/, /^-+END/ { print > "pld-tests/" i ".extracted.crt" }'
+	for tmpcert in pld-tests/*.extracted.crt; do
+		# check expiration date
+		EXPDATE=$(openssl x509 -enddate -noout -in "$tmpcert")
+		EXPDATE=${EXPDATE#notAfter=}
+		EXPDATETIMESTAMP=$(date +"%s" -d "$EXPDATE")
+		NOWTIMESTAMP=$(date +"%s")
+		# mksh is 32bit only
+		if /usr/bin/test "$EXPDATETIMESTAMP" -ge "$NOWTIMESTAMP"; then
+			echo "$cert ($tmpcert): not expired! ${EXPDATE}"
+			return 1
+		fi
+	done
+	rm "$cert"
+	return 0
+}
+
+# expired
+make_sure_expired_and_rm mozilla/Sonera_Class_2_Root_CA.crt
+make_sure_expired_and_rm mozilla/DST_Root_CA_X3.crt
+make_sure_expired_and_rm mozilla/QuoVadis_Root_CA.crt
+
 # See TODO
 # %{__rm} mozilla/RSA_Security_1024_v3.crt
 
@@ -182,7 +208,23 @@ cd pld-tests
 cat $RPM_BUILD_ROOT%{certsdir}/ca-certificates.crt | awk '/^-+BEGIN/ { i++; } /^-+BEGIN/, /^-+END/ { print > i ".extracted.crt" }'
 for cert in *.extracted.crt; do
 	openssl x509 -in "$cert" -noout -sha1 -fingerprint > "$cert.fingerprint"
+
+
+	# check expiration date
+	EXPDATE=$(openssl x509 -enddate -noout -in "$cert")
+	EXPDATE=${EXPDATE#notAfter=}
+	EXPDATETIMESTAMP=$(date +"%s" -d "$EXPDATE")
+	NOWTIMESTAMP=$(date +"%s")
+	# mksh is 32bit only
+	if /usr/bin/test "$EXPDATETIMESTAMP" -lt "$NOWTIMESTAMP"; then
+		echo "!!! Expired certificate: $cert"
+		openssl x509 -subject -issuer -startdate -enddate -email -alias -noout -in "$cert"
+		echo "Fingerprint: $(cat "$cert.fingerprint")"
+		echo "\n\n"
+		exit 1
+	fi
 done
+
 DUPLICATES=$(sort *.fingerprint | uniq -c | sort -nr | awk ' { if ($1 != 1) { print $0; } } ')
 if [ -n "$DUPLICATES" ]; then
 	echo -e "\n\nFound duplicates for certificates (count, type, fingerprint):\n\n$DUPLICATES\n\nFailing..."

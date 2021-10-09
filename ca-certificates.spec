@@ -11,13 +11,13 @@
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
-%define	ver_date	20210119
+%define	ver_date	20211004
 Version:	%{ver_date}
-Release:	6
+Release:	1
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	http://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
-# Source0-md5:	c02582bf9ae338e558617291897615eb
+# Source0-md5:	42aece456797aba11e6ef894894f36d3
 Source2:	http://www.certum.pl/keys/CA.pem
 # Source2-md5:	35610177afc9c64e70f1ce62c1885496
 Source14:	http://www.certum.pl/CTNCA.pem
@@ -57,14 +57,17 @@ Source36:	http://www.terena.org/activities/tcs/repository-g3/TERENA_SSL_High_Ass
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
-
+Patch3:		py_cryptography35.patch
+Patch4:		blacklist.patch
 Patch5:		%{name}-DESTDIR.patch
 Patch6:		%{name}.d.patch
 Patch7:		no-openssl-rehash.patch
 URL:		https://packages.debian.org/sid/ca-certificates
 BuildRequires:	openssl-tools
-BuildRequires:	python >= 1:2.6
-BuildRequires:	python-modules
+BuildRequires:	python3
+BuildRequires:	python3-cryptography
+BuildRequires:	python3-packaging
+BuildRequires:	python3-modules
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
@@ -107,7 +110,8 @@ cd work
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
-
+%patch3 -p1
+%patch4 -p1
 %patch5 -p1
 %patch6 -p1
 %patch7 -p1
@@ -170,11 +174,6 @@ make_sure_expired_and_rm() {
 	rm "$cert"
 	return 0
 }
-
-# expired
-make_sure_expired_and_rm mozilla/Sonera_Class_2_Root_CA.crt
-make_sure_expired_and_rm mozilla/DST_Root_CA_X3.crt
-make_sure_expired_and_rm mozilla/QuoVadis_Root_CA.crt
 
 # See TODO
 # %{__rm} mozilla/RSA_Security_1024_v3.crt

@@ -15,10 +15,10 @@
  
  # Helper files.  (Some of them are not simple arrays because we spawn
  # subshells later on.)
--TEMPBUNDLE="$(mktemp -t "${CERTBUNDLE}.tmp.XXXXXX")"
-+TEMPBUNDLE="$(mktemp "${CERTBUNDLE}.tmp.XXXXXX")"
- ADDED="$(mktemp -t "ca-certificates.tmp.XXXXXX")"
- REMOVED="$(mktemp -t "ca-certificates.tmp.XXXXXX")"
+-TEMPBUNDLE="${ETCCERTSDIR}/${CERTBUNDLE}.new"
++TEMPBUNDLE="${CERTBUNDLE}.new"
+ ADDED="$(mktemp --tmpdir "ca-certificates.tmp.XXXXXX")"
+ REMOVED="$(mktemp --tmpdir "ca-certificates.tmp.XXXXXX")"
  
 @@ -62,7 +62,7 @@
  # bundle.
@@ -67,6 +67,6 @@
 -  done
 -fi
 -
- rm -f "$CERTBUNDLE"
- 
  ADDED_CNT=$(wc -l < "$ADDED")
+ REMOVED_CNT=$(wc -l < "$REMOVED")
+ 

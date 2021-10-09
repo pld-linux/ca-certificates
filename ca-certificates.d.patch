@@ -64,4 +64,4 @@
 +  done
  done
  
- rm -f "$CERTBUNDLE"
+ ADDED_CNT=$(wc -l < "$ADDED")

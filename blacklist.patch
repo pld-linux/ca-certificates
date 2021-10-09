@@ -1,0 +1,9 @@
+--- work/mozilla/blacklist.txt.orig	2021-10-07 17:12:47.000000000 +0200
++++ work/mozilla/blacklist.txt	2021-10-09 22:48:50.449155614 +0200
+@@ -10,3 +10,6 @@
+ 
+ # Expired CA (#995432)
+ "DST Root CA X3"
++
++# Negative serial number (python crytography fails to parse it)
++"EC-ACC"

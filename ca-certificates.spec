@@ -13,7 +13,7 @@ Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 %define	ver_date	20211016
 Version:	%{ver_date}
-Release:	1
+Release:	2
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	http://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
@@ -246,10 +246,11 @@ rm -rf $RPM_BUILD_ROOT
 %postun update
 /usr/bin/find "%{openssldir}" -xtype l -delete || :
 
-%pretrans
-if [ -L /etc/ssl/certs ]; then
-	rm -f /etc/ssl/certs
-fi
+%pretrans -p <lua>
+local mode = posix.stat("/etc/ssl/certs")
+if mode["type"] == "link" then
+	posix.unlink("/etc/ssl/certs")
+end
 
 %files
 %defattr(644,root,root,755)

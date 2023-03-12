@@ -17,8 +17,8 @@
  # subshells later on.)
 -TEMPBUNDLE="${ETCCERTSDIR}/${CERTBUNDLE}.new"
 +TEMPBUNDLE="${CERTBUNDLE}.new"
- ADDED="$(mktemp --tmpdir "ca-certificates.tmp.XXXXXX")"
- REMOVED="$(mktemp --tmpdir "ca-certificates.tmp.XXXXXX")"
+ ADDED="$(mktemp -p "${TMPDIR:-/tmp}" "ca-certificates.tmp.XXXXXX")"
+ REMOVED="$(mktemp -p "${TMPDIR:-/tmp}" "ca-certificates.tmp.XXXXXX")"
  
 @@ -62,7 +62,7 @@
  # bundle.

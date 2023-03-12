@@ -11,13 +11,13 @@
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
-%define	ver_date	20211016
+%define	ver_date	20230311
 Version:	%{ver_date}
-Release:	3
+Release:	1
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	http://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
-# Source0-md5:	5cce77de047611c4b9384d4ce52d9204
+# Source0-md5:	fc1c3ec0067385f0be8ac7f6e670a0f8
 Source2:	http://www.certum.pl/keys/CA.pem
 # Source2-md5:	35610177afc9c64e70f1ce62c1885496
 Source14:	http://www.certum.pl/CTNCA.pem
@@ -57,11 +57,9 @@ Source36:	http://www.terena.org/activities/tcs/repository-g3/TERENA_SSL_High_Ass
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
-Patch3:		py_cryptography35.patch
-Patch4:		blacklist.patch
-Patch5:		%{name}-DESTDIR.patch
-Patch6:		%{name}.d.patch
-Patch7:		no-openssl-rehash.patch
+Patch3:		%{name}-DESTDIR.patch
+Patch4:		%{name}.d.patch
+Patch5:		no-openssl-rehash.patch
 URL:		https://packages.debian.org/sid/ca-certificates
 BuildRequires:	openssl-tools
 BuildRequires:	python3
@@ -106,15 +104,13 @@ Skrypt i dane do odświeżania bazy certyfikatów CA.
 
 %prep
 %setup -qc
-cd work
+cd ca-certificates
 %patch0 -p1
 %patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
-%patch7 -p1
 
 %{__sed} -i -e 's,@openssldir@,%{openssldir},' sbin/update-ca-certificates*
 
@@ -137,7 +133,7 @@ install -d esteid
 cp -pi %{SOURCE29} esteid/ESTEID-SK_2011.crt
 
 %build
-cd work
+cd ca-certificates
 install -d terena
 openssl x509 -inform DER -in %{SOURCE23} -outform PEM -out terena/$(basename %{SOURCE23})
 openssl x509 -inform DER -in %{SOURCE24} -outform PEM -out terena/$(basename %{SOURCE24})
@@ -180,7 +176,7 @@ make_sure_expired_and_rm() {
 
 %install
 rm -rf $RPM_BUILD_ROOT
-cd work
+cd ca-certificates
 install -d $RPM_BUILD_ROOT{%{_datadir}/%{name},%{_sbindir},%{certsdir},/etc/pki/tls/certs,%{_sysconfdir}/ca-certificates.d}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -254,7 +250,7 @@ end
 
 %files
 %defattr(644,root,root,755)
-%doc work/debian/{README.Debian,changelog}
+%doc ca-certificates/debian/{README.Debian,changelog}
 %dir /etc/pki/tls
 %dir /etc/pki/tls/certs
 %dir /etc/ssl

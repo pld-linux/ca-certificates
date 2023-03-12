@@ -13,7 +13,7 @@ Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 %define	ver_date	20230311
 Version:	%{ver_date}
-Release:	1
+Release:	2
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	http://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
@@ -60,6 +60,7 @@ Patch2:		%{name}-etc-certs.patch
 Patch3:		%{name}-DESTDIR.patch
 Patch4:		%{name}.d.patch
 Patch5:		no-openssl-rehash.patch
+Patch6:		blacklist.patch
 URL:		https://packages.debian.org/sid/ca-certificates
 BuildRequires:	openssl-tools
 BuildRequires:	python3
@@ -111,6 +112,7 @@ cd ca-certificates
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
+%patch6 -p1
 
 %{__sed} -i -e 's,@openssldir@,%{openssldir},' sbin/update-ca-certificates*
 

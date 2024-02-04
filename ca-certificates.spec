@@ -72,7 +72,7 @@ BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	unzip
 BuildRequires:	xz
-Obsoletes:	certificates
+Obsoletes:	certificates < 1.2
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 

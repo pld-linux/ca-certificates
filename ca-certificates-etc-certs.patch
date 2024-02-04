@@ -40,7 +40,7 @@
      rm -f "$PEM"
 @@ -111,24 +111,18 @@
  
- sed -e '/^$/d' -e '/^#/d' -e '/^!/d' "$CERTSCONF" | while read crt
+ sed -e '/^$/d' -e '/^#/d' -e '/^!/d' "$CERTSCONF" | while read -r crt
  do
 -  if ! test -f "$CERTSDIR/$crt"
 +  if test -f "$CERTSDIR/$crt"
@@ -61,7 +61,7 @@
 -# administrator.
 -if [ -d "$LOCALCERTSDIR" ]
 -then
--  find -L "$LOCALCERTSDIR" -type f -name '*.crt' | sort | while read crt
+-  find -L "$LOCALCERTSDIR" -type f -name '*.crt' | sort | while read -r crt
 -  do
 -    add "$crt"
 -  done

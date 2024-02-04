@@ -19,7 +19,7 @@
 -  echo "Running hooks in $HOOKSDIR..."
 -  VERBOSE_ARG=
 -  [ "$verbose" = 0 ] || VERBOSE_ARG="--verbose"
--  eval run-parts "$VERBOSE_ARG" --test -- "$HOOKSDIR" | while read hook
+-  eval run-parts "$VERBOSE_ARG" --test -- "$HOOKSDIR" | while read -r hook
 -  do
 -    ( cat "$ADDED"
 -      cat "$REMOVED" ) | "$hook" || echo "E: $hook exited with code $?."
@@ -40,19 +40,10 @@
  .SH SYNOPSIS
  .B update-ca-certificates
  .RI [ options ]
-@@ -26,7 +26,7 @@ This manual page documents briefly the
- command.
- .PP
- \fBupdate-ca-certificates\fP is a program that updates the directory
--/etc/ssl/certs to hold SSL certificates and generates ca-certificates.crt,
-+@openssldir@ to hold SSL certificates and generates ca-certificates.crt,
- a concatenated single-file list of certificates.
- .PP
- It reads the file /etc/ca-certificates.conf. Each line gives a pathname of
 @@ -38,11 +38,6 @@
- .PP
- Furthermore all certificates with a .crt extension found below
- /usr/local/share/ca-certificates are also included as implicitly trusted.
+ should be one certificate per file, and not multiple certificates in a single
+ file. Then run update-ca-certificates to merge the new certificates into the
+ existing machine store at /etc/ssl/certs.
 -.PP
 -Before terminating, \fBupdate-ca-certificates\fP invokes
 -\fBrun-parts\fP on /etc/ca-certificates/update.d and calls each hook with
@@ -61,19 +52,21 @@
  .SH OPTIONS
  A summary of options is included below.
  .TP
-@@ -53,13 +48,13 @@
+@@ -61,7 +61,7 @@
  Be verbose. Output \fBopenssl rehash\fP.
  .TP
  .B \-f, \-\-fresh
 -Fresh updates.  Remove symlinks in /etc/ssl/certs directory.
 +Fresh updates.  Remove symlinks in @openssldir@ directory.
- .SH FILES
  .TP
+ .B \-\-certsconf
+ Change the configuration file. By default, the file
+@@ -84,7 +84,7 @@
  .I /etc/ca-certificates.conf
  A configuration file.
  .TP
 -.I /etc/ssl/certs/ca-certificates.crt
 +.I /etc/openssl/ca-certificates.crt
- A single-file version of CA certificates.  This holds
- all CA certificates that you activated in /etc/ca-certificates.conf.
+ A single-file version of CA certificates. This holds all CA certificates
+ that were activated in /etc/ca-certificates.conf.
  .TP

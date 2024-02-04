@@ -22,7 +22,7 @@
  
 -# Handle certificates that should be removed.  This is an explicit act
 -# by prefixing lines in the configuration files with exclamation marks (!).
--sed -n -e '/^$/d' -e 's/^!//p' "$CERTSCONF" | while read crt
+-sed -n -e '/^$/d' -e 's/^!//p' "$CERTSCONF" | while read -r crt
 -do
 -  remove "$CERTSDIR/$crt"
 -done
@@ -32,12 +32,12 @@
 +
 +  # Handle certificates that should be removed.  This is an explicit act
 +  # by prefixing lines in the configuration files with exclamation marks (!).
-+  sed -n -e '/^$/d' -e 's/^!//p' $conf | while read crt
++  sed -n -e '/^$/d' -e 's/^!//p' $conf | while read -r crt
 +  do
 +    remove "$CERTSDIR/$crt"
 +  done
  
--sed -e '/^$/d' -e '/^#/d' -e '/^!/d' "$CERTSCONF" | while read crt
+-sed -e '/^$/d' -e '/^#/d' -e '/^!/d' "$CERTSCONF" | while read -r crt
 -do
 -  if test -f "$CERTSDIR/$crt"
 -   then
@@ -49,7 +49,7 @@
 -    echo "W: $CERTSDIR/$crt or $LOCALCERTSDIR/$crt not found, but listed in $CERTSCONF." >&2
 -    continue
 -  fi
-+  sed -e '/^$/d' -e '/^#/d' -e '/^!/d' $conf | while read crt
++  sed -e '/^$/d' -e '/^#/d' -e '/^!/d' $conf | while read -r crt
 +  do
 +    if test -f "$CERTSDIR/$crt"
 +    then

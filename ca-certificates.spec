@@ -74,11 +74,7 @@ Summary(pl.UTF-8):	Skrypt do odświeżania bazy certyfikatów CA
 Group:		Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	mktemp
-%if "%{pld_release}" == "ac"
-Requires:	openssl-tools >= 0.9.7m-6.3
-%else
 Requires:	openssl-tools >= 0.9.8i-3
-%endif
 
 %description update
 Script and data for updating CA Certificates database.

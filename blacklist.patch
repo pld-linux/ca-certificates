@@ -1,7 +1,0 @@
---- ca-certificates/mozilla/blacklist.txt.orig	2023-03-11 09:37:33.000000000 +0100
-+++ ca-certificates/mozilla/blacklist.txt	2023-03-12 18:49:47.285310067 +0100
-@@ -4,3 +4,4 @@
- "Explicitly Distrust DigiNotar Root CA"
- 
- # Expired CAs
-+"Security Communication Root CA"

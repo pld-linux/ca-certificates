@@ -5,7 +5,7 @@
  
  CERTSDIR = /usr/share/ca-certificates
 -SUBDIRS = mozilla
-+SUBDIRS = mozilla certum terena esteid
++SUBDIRS = mozilla certum terena
  
  all:
  	for dir in $(SUBDIRS); do \
@@ -26,21 +26,6 @@
 +	done
 --- ca-certificates/terena/Makefile	1970-01-01 01:00:00.000000000 +0100
 +++ ca-certificates-more/terena/Makefile	2007-02-02 07:23:19.000000000 +0100
-@@ -0,0 +1,12 @@
-+#
-+# Makefile
-+#
-+
-+all:
-+
-+clean:
-+
-+install:
-+	for p in *.crt; do \
-+	 install -p -m 644 $$p $(CERTSDIR)/$$p ; \
-+	done
---- ca-certificates/esteid/Makefile	1970-01-01 01:00:00.000000000 +0100
-+++ ca-certificates-more/esteid/Makefile	2007-02-02 07:23:19.000000000 +0100
 @@ -0,0 +1,12 @@
 +#
 +# Makefile

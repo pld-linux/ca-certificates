@@ -11,13 +11,13 @@
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
-%define	ver_date	20240203
+%define	ver_date	20241223
 Version:	%{ver_date}
 Release:	1
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	http://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
-# Source0-md5:	228129ccf8cd99b991d771c44dd4052c
+# Source0-md5:	fe4ae74dd9fc7b13bd98b7ec2d1696a1
 Source2:	http://www.certum.pl/keys/CA.pem
 # Source2-md5:	35610177afc9c64e70f1ce62c1885496
 Source14:	http://www.certum.pl/CTNCA.pem
@@ -38,29 +38,12 @@ Source23:	http://crt.tcs.terena.org/TERENAPersonalCA.crt
 # Source23-md5:	53eaa497c8fb0b79f14fe9f69693689a
 Source24:	http://crt.tcs.terena.org/TERENAeSciencePersonalCA.crt
 # Source24-md5:	e25cc655d3ebe920ca9c187e3dde9191
-Source29:	http://www.sk.ee/upload/files/ESTEID-SK%202011.pem.cer?/ESTEID-SK_2011.pem.cer
-# Source29-md5:	cfcc1e592cb0ff305158a7e32730546c
-Source30:	http://www.terena.org/activities/tcs/repository/sha2/TERENA_SSL_CA_2.pem
-# Source30-md5:	96700974350cecfcfbd904d52c3a3942
-Source31:	http://www.terena.org/activities/tcs/repository/sha2/TERENA_Personal_CA_2.pem
-# Source31-md5:	d40e5c821f8559faf5bcd55eac5e1371
-Source32:	http://www.terena.org/activities/tcs/repository/sha2/TERENA_Code_Signing_CA_2.pem
-# Source32-md5:	69ff653e730adf87ff59bf373950b357
-Source33:	http://www.terena.org/activities/tcs/repository-g3/TERENA_SSL_CA_3.pem
-# Source33-md5:	b22ed904900ed6b3bc129f9a35ba5a66
-Source34:	http://www.terena.org/activities/tcs/repository-g3/TERENA_Personal_CA_3.pem
-# Source34-md5:	eb5ddefe94750c2f8d4f11cb1f3af911
-Source35:	http://www.terena.org/activities/tcs/repository-g3/TERENA_Code_Signing_CA_3.pem
-# Source35-md5:	43375a208fba0a5e73f1912faa4db86d
-Source36:	http://www.terena.org/activities/tcs/repository-g3/TERENA_SSL_High_Assurance_CA_3.pem
-# Source36-md5:	6e00d9ede4460e739eb285ea023299f0
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
 Patch3:		%{name}-DESTDIR.patch
 Patch4:		%{name}.d.patch
 Patch5:		no-openssl-rehash.patch
-Patch6:		blacklist.patch
 URL:		https://packages.debian.org/sid/ca-certificates
 BuildRequires:	openssl-tools
 BuildRequires:	python3
@@ -112,7 +95,6 @@ cd ca-certificates
 %patch3 -p1
 %patch4 -p1
 %patch5 -p1
-%patch6 -p1
 
 %{__sed} -i -e 's,@openssldir@,%{openssldir},' sbin/update-ca-certificates*
 
@@ -129,23 +111,11 @@ for a in certum/*.pem; do
 	mv -i "$a" "${a%.pem}.crt"
 done
 
-# http://www.sk.ee/en/Repository/certs/rootcertificates
-# ESTEID-SK 2011
-install -d esteid
-cp -pi %{SOURCE29} esteid/ESTEID-SK_2011.crt
-
 %build
 cd ca-certificates
 install -d terena
 openssl x509 -inform DER -in %{SOURCE23} -outform PEM -out terena/$(basename %{SOURCE23})
 openssl x509 -inform DER -in %{SOURCE24} -outform PEM -out terena/$(basename %{SOURCE24})
-cp %{SOURCE30} terena/$(basename %{SOURCE30} .pem).crt
-cp %{SOURCE31} terena/$(basename %{SOURCE31} .pem).crt
-cp %{SOURCE32} terena/$(basename %{SOURCE32} .pem).crt
-sed 's/\r//' %{SOURCE33} > terena/$(basename %{SOURCE33} .pem).crt
-sed 's/\r//' %{SOURCE34} > terena/$(basename %{SOURCE34} .pem).crt
-sed 's/\r//' %{SOURCE35} > terena/$(basename %{SOURCE35} .pem).crt
-sed 's/\r//' %{SOURCE36} > terena/$(basename %{SOURCE36} .pem).crt
 
 %{__make}
 

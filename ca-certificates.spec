@@ -16,27 +16,27 @@ Version:	%{ver_date}
 Release:	1
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
-Source0:	http://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
+Source0:	https://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
 # Source0-md5:	d3b07ed9bd2d2f966419aa0b1c3fad23
-Source2:	http://www.certum.pl/keys/CA.pem
+Source2:	https://www.certum.pl/keys/CA.pem
 # Source2-md5:	35610177afc9c64e70f1ce62c1885496
-Source14:	http://www.certum.pl/CTNCA.pem
+Source14:	https://www.certum.pl/CTNCA.pem
 # Source14-md5:	231b5b8bf05c5e93a9b2ebc4186eb6f7
-Source15:	http://repository.certum.pl/class1casha2.pem
+Source15:	https://repository.certum.pl/class1casha2.pem
 # Source15-md5:	b52dde6e2618a21965afbe6d6676d09f
-Source16:	http://repository.certum.pl/dvcasha2.pem
+Source16:	https://repository.certum.pl/dvcasha2.pem
 # Source16-md5:	88ce64a84375c95ab6f7c8515dd2a117
-Source17:	http://repository.certum.pl/ovcasha2.pem
+Source17:	https://repository.certum.pl/ovcasha2.pem
 # Source17-md5:	3149c923bd23469d6b14caa6334f8b63
-Source18:	http://repository.certum.pl/evcasha2.pem
+Source18:	https://repository.certum.pl/evcasha2.pem
 # Source18-md5:	ac54dc6cf3af7e243879b1c8b4aca8a3
 #Source19:	http://repository.certum.pl/dvcasha2.pem
 ## Source19-md5:	88ce64a84375c95ab6f7c8515dd2a117
-Source20:	http://repository.certum.pl/gscasha2.pem
+Source20:	https://repository.certum.pl/gscasha2.pem
 # Source20-md5:	a29d37f95dafc08cef36015922e3b0d3
-Source23:	http://crt.tcs.terena.org/TERENAPersonalCA.crt
+Source23:	https://crt.tcs.terena.org/TERENAPersonalCA.crt
 # Source23-md5:	53eaa497c8fb0b79f14fe9f69693689a
-Source24:	http://crt.tcs.terena.org/TERENAeSciencePersonalCA.crt
+Source24:	https://crt.tcs.terena.org/TERENAeSciencePersonalCA.crt
 # Source24-md5:	e25cc655d3ebe920ca9c187e3dde9191
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch

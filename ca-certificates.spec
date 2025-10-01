@@ -13,12 +13,12 @@ Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 %define	ver_date	20250419
 Version:	%{ver_date}
-Release:	1
+Release:	2
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	https://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
 # Source0-md5:	d3b07ed9bd2d2f966419aa0b1c3fad23
-Source2:	https://www.certum.pl/keys/CA.pem
+Source2:	https://www.certum.pl/CA.pem
 # Source2-md5:	35610177afc9c64e70f1ce62c1885496
 Source14:	https://www.certum.pl/CTNCA.pem
 # Source14-md5:	231b5b8bf05c5e93a9b2ebc4186eb6f7
@@ -30,10 +30,12 @@ Source17:	https://repository.certum.pl/ovcasha2.pem
 # Source17-md5:	3149c923bd23469d6b14caa6334f8b63
 Source18:	https://repository.certum.pl/evcasha2.pem
 # Source18-md5:	ac54dc6cf3af7e243879b1c8b4aca8a3
-#Source19:	http://repository.certum.pl/dvcasha2.pem
-## Source19-md5:	88ce64a84375c95ab6f7c8515dd2a117
+Source19:	https://repository.certum.pl/ctnca-ctrca.pem
+# Source19-md5:	ea746f231a0f20ae4a5bd98aa6062900
 Source20:	https://repository.certum.pl/gscasha2.pem
 # Source20-md5:	a29d37f95dafc08cef36015922e3b0d3
+Source21:	https://files.certum.eu/documents/klucze_ca/CertumTrustedNetworkCA/CROSS-CTNCA-CTNCA2.crt
+# Source21-md5:	c03631774d30bdc4f2ce283959334dbf
 Source23:	https://crt.tcs.terena.org/TERENAPersonalCA.crt
 # Source23-md5:	53eaa497c8fb0b79f14fe9f69693689a
 Source24:	https://crt.tcs.terena.org/TERENAeSciencePersonalCA.crt
@@ -101,8 +103,9 @@ cp -pi %{SOURCE15} certum
 cp -pi %{SOURCE16} certum
 cp -pi %{SOURCE17} certum
 cp -pi %{SOURCE18} certum
-#cp -pi %{SOURCE19} certum
+cp -pi %{SOURCE19} certum
 cp -pi %{SOURCE20} certum
+cp -pi %{SOURCE21} certum
 for a in certum/*.pem; do
 	mv -i "$a" "${a%.pem}.crt"
 done

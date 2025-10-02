@@ -13,11 +13,12 @@ Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 %define	ver_date	20250419
 Version:	%{ver_date}
-Release:	2
+Release:	3
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	https://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
 # Source0-md5:	d3b07ed9bd2d2f966419aa0b1c3fad23
+# https://www.certum.pl/pl/cert_wiedza_zaswiadczenia_klucze_certum/
 Source2:	https://www.certum.pl/CA.pem
 # Source2-md5:	35610177afc9c64e70f1ce62c1885496
 Source14:	https://www.certum.pl/CTNCA.pem
@@ -36,6 +37,8 @@ Source20:	https://repository.certum.pl/gscasha2.pem
 # Source20-md5:	a29d37f95dafc08cef36015922e3b0d3
 Source21:	https://files.certum.eu/documents/klucze_ca/CertumTrustedNetworkCA/CROSS-CTNCA-CTNCA2.crt
 # Source21-md5:	c03631774d30bdc4f2ce283959334dbf
+Source22:	https://repository.certum.pl/ctnca-cec384ca.pem
+# Source22-md5:	8b8273bcb8390ae473183985cafe079c
 Source23:	https://crt.tcs.terena.org/TERENAPersonalCA.crt
 # Source23-md5:	53eaa497c8fb0b79f14fe9f69693689a
 Source24:	https://crt.tcs.terena.org/TERENAeSciencePersonalCA.crt
@@ -106,6 +109,7 @@ cp -pi %{SOURCE18} certum
 cp -pi %{SOURCE19} certum
 cp -pi %{SOURCE20} certum
 cp -pi %{SOURCE21} certum
+cp -pi %{SOURCE22} certum
 for a in certum/*.pem; do
 	mv -i "$a" "${a%.pem}.crt"
 done

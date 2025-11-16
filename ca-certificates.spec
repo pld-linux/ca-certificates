@@ -13,7 +13,7 @@ Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 %define	ver_date	20250419
 Version:	%{ver_date}
-Release:	3
+Release:	4
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	https://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
@@ -174,6 +174,8 @@ ln -s %{certsdir}/ca-certificates.crt $RPM_BUILD_ROOT/etc/pki/tls/certs/ca-bundl
 install -d pld-tests
 cd pld-tests
 
+# regex for subjects of allowed expired certs
+ALLOW_EXPIRED="(IE, O=Baltimore, OU=CyberTrust, CN=Baltimore CyberTrust Root)"
 # check for duplicates (to avoid X509_STORE_add_cert "cert already in hash table" problem)
 cat $RPM_BUILD_ROOT%{certsdir}/ca-certificates.crt | awk '/^-+BEGIN/ { i++; } /^-+BEGIN/, /^-+END/ { print > i ".extracted.crt" }'
 for cert in *.extracted.crt; do
@@ -191,7 +193,12 @@ for cert in *.extracted.crt; do
 		openssl x509 -subject -issuer -startdate -enddate -email -alias -noout -in "$cert"
 		echo "Fingerprint: $(cat "$cert.fingerprint")"
 		echo "\n\n"
-		exit 1
+		SUBJECT=$(openssl x509 -in "$cert" -noout -subject | sed 's/^subject= *//')
+		if echo $SUBJECT | grep -E "$ALLOW_EXPIRED"; then
+			echo "EXPIRED CERT IN WHITELIST"
+		else
+			exit 1
+		fi
 	fi
 done
 

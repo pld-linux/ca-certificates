@@ -13,7 +13,7 @@ Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 %define	ver_date	20250419
 Version:	%{ver_date}
-Release:	4
+Release:	5
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	https://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
@@ -101,7 +101,7 @@ cd ca-certificates
 
 install -d certum
 cp -pi %{SOURCE2} certum
-cp -pi %{SOURCE14} certum
+#cp -pi %{SOURCE14} certum
 cp -pi %{SOURCE15} certum
 cp -pi %{SOURCE16} certum
 cp -pi %{SOURCE17} certum
@@ -123,7 +123,7 @@ openssl x509 -inform DER -in %{SOURCE24} -outform PEM -out terena/$(basename %{S
 %{__make}
 
 # We have those and more in specific dirs
-%{__rm} mozilla/Certum*.crt
+#%{__rm} mozilla/Certum*.crt
 
 make_sure_expired_and_rm() {
 	cert="$1"

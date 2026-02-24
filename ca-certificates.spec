@@ -11,13 +11,13 @@
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
-%define	ver_date	20250419
+%define	ver_date	20260223
 Version:	%{ver_date}
-Release:	5
+Release:	1
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	https://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
-# Source0-md5:	d3b07ed9bd2d2f966419aa0b1c3fad23
+# Source0-md5:	03867432676e265fb5ded407b2ab31a9
 # https://www.certum.pl/pl/cert_wiedza_zaswiadczenia_klucze_certum/
 Source2:	https://www.certum.pl/CA.pem
 # Source2-md5:	35610177afc9c64e70f1ce62c1885496

@@ -1,0 +1,102 @@
+--- ca-certificates/sbin/update-ca-certificates.orig
++++ ca-certificates/sbin/update-ca-certificates
+@@ -104,49 +104,20 @@
+ ADDED="$(mktemp -p "${TMPDIR:-/tmp}" "ca-certificates.tmp.XXXXXX")"
+ REMOVED="$(mktemp -p "${TMPDIR:-/tmp}" "ca-certificates.tmp.XXXXXX")"
+ 
+-# Adds a certificate to the list of trusted ones.  This includes a symlink
+-# in /etc/ssl/certs to the certificate file and its inclusion into the
+-# bundle.
++# Adds a certificate to the bundle being built.  The OpenSSL hashed
++# CApath is regenerated afterwards from the finished bundle by p11-kit.
+ add() {
+   CERT="$1"
+-  PEM="$ETCCERTSDIR/$(basename "$CERT" .pem | sed -e 's/.crt$//' -e 's/ /_/g' \
+-                                                  -e 's/[()]/=/g' \
+-                                                  -e 's/,/_/g').pem"
+-  if ! test -e "$PEM" || [ "$(readlink "$PEM")" != "$CERT" ]
+-  then
+-    ln -sf "$CERT" "$PEM"
+-    echo "+$PEM" >> "$ADDED"
+-  fi
++  echo "+$CERT" >> "$ADDED"
+   # Add trailing newline to certificate, if it is missing (#635570)
+   sed -e '$a\' "$CERT" >> "$TEMPBUNDLE"
+ }
+ 
+ remove() {
+   CERT="$1"
+-  PEM="$ETCCERTSDIR/$(basename "$CERT" .pem | sed 's/.crt$//').pem"
+-  if test -L "$PEM"
+-  then
+-    rm -f "$PEM"
+-    echo "-$PEM" >> "$REMOVED"
+-  fi
++  echo "-$CERT" >> "$REMOVED"
+ }
+ 
+-cd "$ETCCERTSDIR"
+-if [ "$fresh" = 1 ]; then
+-  echo "Clearing symlinks in $ETCCERTSDIR..."
+-  find . -type l -print | while read -r symlink
+-  do
+-    case $(readlink "$symlink") in
+-      $CERTSDIR*|$LOCALCERTSDIR*) rm -f "$symlink";;
+-    esac
+-  done
+-  find . -type l -print | while read -r symlink
+-  do
+-    test -f "$symlink" || rm -f "$symlink"
+-  done
+-  echo "done."
+-fi
+-
+ echo "Updating certificates in $ETCCERTSDIR..."
+ 
+ # Add default certificate authorities if requested
+@@ -186,26 +157,6 @@
+ ADDED_CNT=$(wc -l < "$ADDED")
+ REMOVED_CNT=$(wc -l < "$REMOVED")
+ 
+-if [ "$ADDED_CNT" -gt 0 ] || [ "$REMOVED_CNT" -gt 0 ]
+-then
+-  # only run if set of files has changed
+-  # Remove orphan symlinks found in ETCCERTSDIR to prevent `openssl rehash`
+-  # from exiting with an error. See #895482, #895473.
+-  find "$ETCCERTSDIR" -type l ! -exec test -e {} \; -print | while read -r orphan
+-  do
+-    rm -f "$orphan"
+-    if [ "$verbose" = 1 ]; then
+-      echo "Removed orphan symlink $orphan"
+-    fi
+-  done
+-  if [ "$verbose" = 0 ]
+-  then
+-    openssl rehash . > /dev/null
+-  else
+-    openssl rehash -v .
+-  fi
+-fi
+-
+ # chmod and mv only if TEMPBUNDLE exists or install may fail, #996005
+ if [ -f "$TEMPBUNDLE" ]
+ then
+@@ -215,6 +166,18 @@
+   [ -x /sbin/restorecon ] && /sbin/restorecon "$CERTBUNDLE" >/dev/null 2>&1
+ fi
+ 
++# Regenerate the OpenSSL hashed CApath from the freshly built bundle.
++# p11-kit computes the hashes itself, so ca-certificates stays off the
++# openssl -> ca-certificates dependency cycle.  Skipped under --destdir
++# because trust reads the live system trust module, not the buildroot.
++if [ -z "$DESTDIR" ]
++then
++  # drop stale symlinks (incl. the legacy openssl-rehash layout) first;
++  # trust extract leaves foreign symlinks in place otherwise
++  find "$ETCCERTSDIR" -maxdepth 1 -type l -delete 2>/dev/null || :
++  trust extract --format=openssl-directory --filter=ca-anchors --overwrite "$ETCCERTSDIR"
++fi
++
+ echo "$ADDED_CNT added, $REMOVED_CNT removed; done."
+ 
+ # vim:set et sw=2:

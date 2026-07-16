@@ -13,7 +13,7 @@ Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 %define	ver_date	20260601
 Version:	%{ver_date}
-Release:	1
+Release:	2
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	https://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
@@ -48,8 +48,10 @@ Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
 Patch3:		%{name}-DESTDIR.patch
 Patch4:		%{name}.d.patch
-Patch5:		no-openssl-rehash.patch
+Patch5:		%{name}-p11-kit.patch
 URL:		https://packages.debian.org/sid/ca-certificates
+Requires:	mktemp
+Requires:	p11-kit
 BuildRequires:	openssl-tools
 BuildRequires:	python3
 BuildRequires:	python3-cryptography
@@ -60,6 +62,8 @@ BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	unzip
 BuildRequires:	xz
+Provides:	ca-certificates-update = %{version}-%{release}
+Obsoletes:	ca-certificates-update < %{version}-%{release}
 Obsoletes:	certificates < 1.2
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -72,20 +76,6 @@ Common CA Certificates PEM files.
 
 %description -l pl.UTF-8
 Pliki PEM popularnych certyfikatów CA.
-
-%package update
-Summary:	Script for updating CA Certificates database
-Summary(pl.UTF-8):	Skrypt do odświeżania bazy certyfikatów CA
-Group:		Libraries
-Requires:	%{name} = %{version}-%{release}
-Requires:	mktemp
-Requires:	openssl-tools >= 0.9.8i-3
-
-%description update
-Script and data for updating CA Certificates database.
-
-%description update -l pl.UTF-8
-Skrypt i dane do odświeżania bazy certyfikatów CA.
 
 %prep
 %setup -qc
@@ -164,9 +154,7 @@ find . -name '*.crt' | sort | cut -b3-
 ) > $RPM_BUILD_ROOT%{_sysconfdir}/ca-certificates.conf
 
 # build %{certsdir}/ca-certificates.crt
-install -d $RPM_BUILD_ROOT%{openssldir}
 ./sbin/update-ca-certificates --destdir $RPM_BUILD_ROOT
-rm -rf $RPM_BUILD_ROOT%{openssldir}
 
 ln -s %{certsdir}/ca-certificates.crt $RPM_BUILD_ROOT/etc/pki/tls/certs/ca-bundle.crt
 
@@ -218,10 +206,10 @@ ln -s %{certsdir}/ca-certificates.crt $RPM_BUILD_ROOT/etc/ssl/certs
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post update
+%post
 %{_sbindir}/update-ca-certificates --fresh || :
 
-%postun update
+%postun
 /usr/bin/find "%{openssldir}" -xtype l -delete || :
 
 %pretrans -p <lua>
@@ -233,6 +221,7 @@ end
 %files
 %defattr(644,root,root,755)
 %doc ca-certificates/debian/{README.Debian,changelog}
+%attr(755,root,root) %{_sbindir}/update-ca-certificates
 %dir /etc/pki/tls
 %dir /etc/pki/tls/certs
 %dir /etc/ssl
@@ -240,10 +229,6 @@ end
 /etc/ssl/certs/ca-certificates.crt
 %config(noreplace) %verify(not md5 mtime size) /etc/pki/tls/certs/ca-bundle.crt
 %verify(not md5 mtime size) %{certsdir}/ca-certificates.crt
-
-%files update
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_sbindir}/update-ca-certificates
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/ca-certificates.conf
 %dir %{_sysconfdir}/ca-certificates.d
 %{_datadir}/ca-certificates

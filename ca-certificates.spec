@@ -13,7 +13,7 @@ Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 %define	ver_date	20260601
 Version:	%{ver_date}
-Release:	2
+Release:	3
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	https://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
@@ -50,8 +50,11 @@ Patch3:		%{name}-DESTDIR.patch
 Patch4:		%{name}.d.patch
 Patch5:		%{name}-p11-kit.patch
 URL:		https://packages.debian.org/sid/ca-certificates
+Requires:	findutils
+Requires:	grep
 Requires:	mktemp
 Requires:	p11-kit
+Requires:	sed
 BuildRequires:	openssl-tools
 BuildRequires:	python3
 BuildRequires:	python3-cryptography
@@ -210,7 +213,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_sbindir}/update-ca-certificates --fresh || :
 
 %postun
-/usr/bin/find "%{openssldir}" -xtype l -delete || :
+# remove only what update-ca-certificates installed; local admin files stay
+if [ "$1" = "0" ] && [ -f %{openssldir}/.manifest ]; then
+	while IFS= read -r f; do
+		case "$f" in ''|*/*) continue ;; esac
+		rm -f "%{openssldir}/$f"
+	done < %{openssldir}/.manifest
+	rm -f %{openssldir}/.manifest
+fi
 
 %pretrans -p <lua>
 local mode = posix.stat("/etc/ssl/certs")

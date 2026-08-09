@@ -66,7 +66,7 @@ Requires:	mktemp
 Requires:	p11-kit
 Requires:	sed
 Provides:	ca-certificates-update = %{version}-%{release}
-Obsoletes:	ca-certificates-update < %{version}-%{release}
+Obsoletes:	ca-certificates-update < 20260601-2
 Obsoletes:	certificates < 1.2
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)

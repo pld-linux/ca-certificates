@@ -50,21 +50,21 @@ Patch3:		%{name}-DESTDIR.patch
 Patch4:		%{name}.d.patch
 Patch5:		%{name}-p11-kit.patch
 URL:		https://packages.debian.org/sid/ca-certificates
-Requires:	findutils
-Requires:	grep
-Requires:	mktemp
-Requires:	p11-kit
-Requires:	sed
 BuildRequires:	openssl-tools
 BuildRequires:	python3
 BuildRequires:	python3-cryptography
-BuildRequires:	python3-packaging
 BuildRequires:	python3-modules
+BuildRequires:	python3-packaging
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
 BuildRequires:	unzip
 BuildRequires:	xz
+Requires:	findutils
+Requires:	grep
+Requires:	mktemp
+Requires:	p11-kit
+Requires:	sed
 Provides:	ca-certificates-update = %{version}-%{release}
 Obsoletes:	ca-certificates-update < %{version}-%{release}
 Obsoletes:	certificates < 1.2

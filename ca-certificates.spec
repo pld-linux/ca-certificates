@@ -1,28 +1,22 @@
 # TODO
-# - https://bugzilla.mozilla.org/show_bug.cgi?id=549701 and
-#   http://groups.google.com/group/mozilla.dev.security.policy/browse_thread/thread/b6493a285ba79998#
 # - make amsn use system certs
 # - make pidgin use system certs
 # - swap %{certsdir}/ca-certificates.crt /etc/pki/tls/certs/ca-bundle.crt regards file vs symlink
 #
 # Conditional build:
-%bcond_without	tests	# skip duplicates check
+%bcond_without	tests	# certificate duplicate and expiry checks
 
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 %define	ver_date	20260601
 Version:	%{ver_date}
-Release:	4
+Release:	5
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	https://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
 # Source0-md5:	987199e8918ed427ec494a1a716241b0
 # https://www.certum.pl/pl/cert_wiedza_zaswiadczenia_klucze_certum/
-Source2:	https://www.certum.pl/CA.pem
-# Source2-md5:	35610177afc9c64e70f1ce62c1885496
-Source14:	https://www.certum.pl/CTNCA.pem
-# Source14-md5:	231b5b8bf05c5e93a9b2ebc4186eb6f7
 Source15:	https://repository.certum.pl/class1casha2.pem
 # Source15-md5:	b52dde6e2618a21965afbe6d6676d09f
 Source16:	https://repository.certum.pl/dvcasha2.pem
@@ -39,10 +33,6 @@ Source21:	https://files.certum.eu/documents/klucze_ca/CertumTrustedNetworkCA/CRO
 # Source21-md5:	c03631774d30bdc4f2ce283959334dbf
 Source22:	https://repository.certum.pl/ctnca-cec384ca.pem
 # Source22-md5:	8b8273bcb8390ae473183985cafe079c
-Source23:	https://crt.tcs.terena.org/TERENAPersonalCA.crt
-# Source23-md5:	53eaa497c8fb0b79f14fe9f69693689a
-Source24:	https://crt.tcs.terena.org/TERENAeSciencePersonalCA.crt
-# Source24-md5:	e25cc655d3ebe920ca9c187e3dde9191
 Patch0:		%{name}-undebianize.patch
 Patch1:		%{name}-more-certs.patch
 Patch2:		%{name}-etc-certs.patch
@@ -94,8 +84,6 @@ cd ca-certificates
 %{__sed} -i -e 's,@openssldir@,%{openssldir},' sbin/update-ca-certificates*
 
 install -d certum
-cp -pi %{SOURCE2} certum
-#cp -pi %{SOURCE14} certum
 cp -pi %{SOURCE15} certum
 cp -pi %{SOURCE16} certum
 cp -pi %{SOURCE17} certum
@@ -110,38 +98,7 @@ done
 
 %build
 cd ca-certificates
-install -d terena
-openssl x509 -inform DER -in %{SOURCE23} -outform PEM -out terena/$(basename %{SOURCE23})
-openssl x509 -inform DER -in %{SOURCE24} -outform PEM -out terena/$(basename %{SOURCE24})
-
 %{__make}
-
-# We have those and more in specific dirs
-#%{__rm} mozilla/Certum*.crt
-
-make_sure_expired_and_rm() {
-	cert="$1"
-	rm -rf pld-tests
-	install -d pld-tests
-	cat "$cert" |  awk '/^-+BEGIN/ { i++; } /^-+BEGIN/, /^-+END/ { print > "pld-tests/" i ".extracted.crt" }'
-	for tmpcert in pld-tests/*.extracted.crt; do
-		# check expiration date
-		EXPDATE=$(openssl x509 -enddate -noout -in "$tmpcert")
-		EXPDATE=${EXPDATE#notAfter=}
-		EXPDATETIMESTAMP=$(date +"%s" -d "$EXPDATE")
-		NOWTIMESTAMP=$(date +"%s")
-		# mksh is 32bit only
-		if /usr/bin/test "$EXPDATETIMESTAMP" -ge "$NOWTIMESTAMP"; then
-			echo "$cert ($tmpcert): not expired! ${EXPDATE}"
-			return 1
-		fi
-	done
-	rm "$cert"
-	return 0
-}
-
-# See TODO
-# %{__rm} mozilla/RSA_Security_1024_v3.crt
 
 %install
 rm -rf $RPM_BUILD_ROOT
@@ -166,8 +123,8 @@ ln -s %{certsdir}/ca-certificates.crt $RPM_BUILD_ROOT/etc/pki/tls/certs/ca-bundl
 install -d pld-tests
 cd pld-tests
 
-# regex for subjects of allowed expired certs
-ALLOW_EXPIRED="(IE, O=Baltimore, OU=CyberTrust, CN=Baltimore CyberTrust Root)"
+# regex for subjects of allowed expired certs; empty allows none
+ALLOW_EXPIRED=""
 # check for duplicates (to avoid X509_STORE_add_cert "cert already in hash table" problem)
 cat $RPM_BUILD_ROOT%{certsdir}/ca-certificates.crt | awk '/^-+BEGIN/ { i++; } /^-+BEGIN/, /^-+END/ { print > i ".extracted.crt" }'
 for cert in *.extracted.crt; do
@@ -186,7 +143,7 @@ for cert in *.extracted.crt; do
 		echo "Fingerprint: $(cat "$cert.fingerprint")"
 		echo "\n\n"
 		SUBJECT=$(openssl x509 -in "$cert" -noout -subject | sed 's/^subject= *//')
-		if echo $SUBJECT | grep -E "$ALLOW_EXPIRED"; then
+		if [ -n "$ALLOW_EXPIRED" ] && echo "$SUBJECT" | grep -E "$ALLOW_EXPIRED"; then
 			echo "EXPIRED CERT IN WHITELIST"
 		else
 			exit 1

@@ -11,7 +11,7 @@ Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
 %define	ver_date	20260601
 Version:	%{ver_date}
-Release:	5
+Release:	6
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	https://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
@@ -40,20 +40,25 @@ Patch3:		%{name}-DESTDIR.patch
 Patch4:		%{name}.d.patch
 Patch5:		%{name}-p11-kit.patch
 URL:		https://packages.debian.org/sid/ca-certificates
+%if %{with tests}
 BuildRequires:	openssl-tools
+%endif
 BuildRequires:	python3
 BuildRequires:	python3-cryptography
 BuildRequires:	python3-modules
-BuildRequires:	python3-packaging
 BuildRequires:	rpm >= 4.4.9-56
 BuildRequires:	sed >= 4.0
 BuildRequires:	tar >= 1:1.22
-BuildRequires:	unzip
 BuildRequires:	xz
-Requires(post):	mktemp
+Requires(post):	coreutils
+Requires(post):	findutils
+Requires(post):	grep
+Requires(post):	p11-kit
+Requires(post):	sed
+Requires(postun):	coreutils
+Requires:	coreutils
 Requires:	findutils
 Requires:	grep
-Requires:	mktemp
 Requires:	p11-kit
 Requires:	sed
 Provides:	ca-certificates-update = %{version}-%{release}

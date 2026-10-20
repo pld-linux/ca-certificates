@@ -9,13 +9,13 @@
 Summary:	Common CA Certificates PEM files
 Summary(pl.UTF-8):	Pliki PEM popularnych certyfikatów CA
 Name:		ca-certificates
-%define	ver_date	20260601
+%define	ver_date	20260816
 Version:	%{ver_date}
-Release:	6
+Release:	1
 License:	GPL v2 (scripts), MPL v2 (mozilla certs), distributable (other certs)
 Group:		Base
 Source0:	https://ftp.debian.org/debian/pool/main/c/ca-certificates/%{name}_%{version}.tar.xz
-# Source0-md5:	987199e8918ed427ec494a1a716241b0
+# Source0-md5:	07f9151e0d2e7e4849362c768d61b76d
 # https://www.certum.pl/pl/cert_wiedza_zaswiadczenia_klucze_certum/
 Source15:	https://repository.certum.pl/class1casha2.pem
 # Source15-md5:	b52dde6e2618a21965afbe6d6676d09f
@@ -39,6 +39,8 @@ Patch2:		%{name}-etc-certs.patch
 Patch3:		%{name}-DESTDIR.patch
 Patch4:		%{name}.d.patch
 Patch5:		%{name}-p11-kit.patch
+# drops eMudhra emSign roots; remove once Debian ships NSS builtins >= 2.92
+Patch6:		%{name}-nss-3.131.1.patch
 URL:		https://packages.debian.org/sid/ca-certificates
 %if %{with tests}
 BuildRequires:	openssl-tools
@@ -85,6 +87,7 @@ cd ca-certificates
 %patch -P3 -p1
 %patch -P4 -p1
 %patch -P5 -p1
+%patch -P6 -p1
 
 %{__sed} -i -e 's,@openssldir@,%{openssldir},' sbin/update-ca-certificates*
 
